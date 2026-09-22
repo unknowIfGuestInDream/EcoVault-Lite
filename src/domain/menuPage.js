@@ -23,14 +23,70 @@
  */
 export const MENU_PAGES = Object.freeze(
   [
-    { key: 'dashboard', title: '控制台', path: '/dashboard', group: 'MAIN', adminOnly: false, configurable: false },
-    { key: 'passwords', title: '密码管理', path: '/passwords', group: 'MAIN', adminOnly: false, configurable: true },
-    { key: 'salary', title: '工资管理', path: '/finance', group: 'FINANCE', adminOnly: false, configurable: true },
-    { key: 'ledger', title: '收入支出管理', path: '/finance/ledger', group: 'FINANCE', adminOnly: false, configurable: true },
-    { key: 'profile', title: '个人中心', path: '/profile', group: 'MAIN', adminOnly: false, configurable: false },
-    { key: 'users', title: '用户管理', path: '/admin/users', group: 'ADMIN', adminOnly: true, configurable: false },
-    { key: 'logs', title: '日志管理', path: '/admin/logs', group: 'ADMIN', adminOnly: true, configurable: false },
-    { key: 'roles', title: '角色管理', path: '/admin/roles', group: 'ADMIN', adminOnly: true, configurable: false },
+    {
+      key: 'dashboard',
+      title: '控制台',
+      path: '/dashboard',
+      group: 'MAIN',
+      adminOnly: false,
+      configurable: false,
+    },
+    {
+      key: 'passwords',
+      title: '密码管理',
+      path: '/passwords',
+      group: 'MAIN',
+      adminOnly: false,
+      configurable: true,
+    },
+    {
+      key: 'salary',
+      title: '工资管理',
+      path: '/finance',
+      group: 'FINANCE',
+      adminOnly: false,
+      configurable: true,
+    },
+    {
+      key: 'ledger',
+      title: '收入支出管理',
+      path: '/finance/ledger',
+      group: 'FINANCE',
+      adminOnly: false,
+      configurable: true,
+    },
+    {
+      key: 'profile',
+      title: '个人中心',
+      path: '/profile',
+      group: 'MAIN',
+      adminOnly: false,
+      configurable: false,
+    },
+    {
+      key: 'users',
+      title: '用户管理',
+      path: '/admin/users',
+      group: 'ADMIN',
+      adminOnly: true,
+      configurable: false,
+    },
+    {
+      key: 'logs',
+      title: '日志管理',
+      path: '/admin/logs',
+      group: 'ADMIN',
+      adminOnly: true,
+      configurable: false,
+    },
+    {
+      key: 'roles',
+      title: '角色管理',
+      path: '/admin/roles',
+      group: 'ADMIN',
+      adminOnly: true,
+      configurable: false,
+    },
   ].map((page) => Object.freeze(page))
 );
 
@@ -68,6 +124,25 @@ export const CONFIGURABLE_PAGE_KEYS = Object.freeze(
  */
 export function isConfigurablePage(key) {
   return CONFIGURABLE_PAGE_KEYS.includes(key);
+}
+
+/**
+ * Ordered list of configurable page definitions.
+ *
+ * @returns {MenuPageDef[]} Configurable pages in menu order.
+ */
+export function configurablePages() {
+  return MENU_PAGES.filter((page) => page.configurable);
+}
+
+/**
+ * Resolve a menu page definition by its route path.
+ *
+ * @param {string} path - Route path.
+ * @returns {MenuPageDef | undefined} The matching page or undefined.
+ */
+export function getMenuPageByPath(path) {
+  return MENU_PAGES.find((page) => page.path === path);
 }
 
 export default MENU_PAGES;
