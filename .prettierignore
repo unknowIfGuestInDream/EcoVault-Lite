@@ -1,0 +1,7 @@
+node_modules/
+coverage/
+docs-gen/
+data/
+package-lock.json
+*.md
+public/
