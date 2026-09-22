@@ -42,7 +42,7 @@ export class AuthError extends AppError {
   /**
    * @param {string} [message] - Optional message.
    */
-  constructor(message = '未认证或登录状态已失效') {
+  constructor(message = '未认证或登录已失效') {
     super(message, 401);
   }
 }
@@ -71,4 +71,29 @@ export class NotFoundError extends AppError {
   }
 }
 
-export default { AppError, BusinessError, AuthError, AccessDeniedError, NotFoundError };
+/**
+ * One or more request fields failed validation (HTTP 400).
+ *
+ * Mirrors the Java bean-validation handling where all field messages are joined
+ * with `"; "` and returned with response code 400.
+ */
+export class ValidationError extends AppError {
+  /**
+   * @param {string[] | string} messages - Field messages (joined with `"; "`).
+   */
+  constructor(messages) {
+    const list = Array.isArray(messages) ? messages : [messages];
+    super(list.join('; '), 400);
+    /** @type {string[]} */
+    this.messages = list;
+  }
+}
+
+export default {
+  AppError,
+  BusinessError,
+  AuthError,
+  AccessDeniedError,
+  NotFoundError,
+  ValidationError,
+};
