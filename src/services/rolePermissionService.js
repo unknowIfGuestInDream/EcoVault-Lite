@@ -21,7 +21,7 @@ import {
 export class RolePermissionService {
   /**
    * @param {object} deps - Dependencies.
-   * @param {import('../repositories/rolePermissionRepository.js').RolePermissionRepository} deps.repository - RBAC repo.
+   * @param {object} deps.repository - RBAC repo.
    */
   constructor({ repository }) {
     this.repository = repository;

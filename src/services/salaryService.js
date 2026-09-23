@@ -133,7 +133,7 @@ function parseCsvLine(line) {
 export class SalaryService {
   /**
    * @param {object} deps - Dependencies.
-   * @param {import('../repositories/salaryRecordRepository.js').SalaryRecordRepository} deps.repository - Salary repo.
+   * @param {object} deps.repository - Salary repo.
    */
   constructor({ repository }) {
     this.repository = repository;

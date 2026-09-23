@@ -79,7 +79,7 @@ function isApiPath(path) {
 /**
  * Resolve the bearer token from the request (header first, then cookie).
  *
- * @param {import('fastify').FastifyRequest} request - Incoming request.
+ * @param {object} request - Incoming request.
  * @returns {string | null} The raw JWT, or null when absent.
  */
 export function resolveToken(request) {
@@ -97,8 +97,8 @@ export function resolveToken(request) {
 /**
  * Register the authentication and authorization hooks on a Fastify instance.
  *
- * @param {import('fastify').FastifyInstance} app - Fastify instance.
- * @param {import('../context.js').AppContext} context - Application context.
+ * @param {object} app - Fastify instance.
+ * @param {AppContext} context - Application context.
  * @returns {void}
  */
 export function registerSecurity(app, context) {

@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 安全问题反馈
+    url: https://github.com/unknowIfGuestInDream/EcoVault-Lite/security/advisories/new
+    about: 如需报告安全漏洞，请优先使用 GitHub 安全公告私密反馈。

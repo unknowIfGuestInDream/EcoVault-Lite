@@ -92,7 +92,7 @@ function escapeCsv(value) {
 export class LedgerService {
   /**
    * @param {object} deps - Dependencies.
-   * @param {import('../repositories/ledgerEntryRepository.js').LedgerEntryRepository} deps.repository - Ledger repo.
+   * @param {object} deps.repository - Ledger repo.
    */
   constructor({ repository }) {
     this.repository = repository;

@@ -1,0 +1,19 @@
+enhancement:
+  - changed-files:
+      - any-glob-to-any-file: ['src/**']
+
+test:
+  - changed-files:
+      - any-glob-to-any-file: 'test/**'
+
+workflow:
+  - changed-files:
+      - any-glob-to-any-file: .github/**
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ['CHANGELOG.md', 'LICENSE', 'README.md', 'docs/**']
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file: ['package.json', 'package-lock.json']

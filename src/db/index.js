@@ -36,7 +36,7 @@ function ensureDbDir(dbPath) {
  * Create and initialise a database connection.
  *
  * @param {string} [dbPath] - Optional database path override (used by tests).
- * @returns {import('better-sqlite3').Database} An initialised database handle.
+ * @returns {object} An initialised database handle.
  */
 export function createDatabase(dbPath = config.db.path) {
   ensureDbDir(dbPath);
@@ -52,7 +52,7 @@ export function createDatabase(dbPath = config.db.path) {
 /**
  * The shared application database connection.
  *
- * @type {import('better-sqlite3').Database}
+ * @type {object}
  */
 const db = createDatabase();
 

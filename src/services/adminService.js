@@ -35,8 +35,8 @@ function parseRole(role) {
 export class AdminService {
   /**
    * @param {object} deps - Dependencies.
-   * @param {import('../repositories/userRepository.js').UserRepository} deps.userRepository - User repo.
-   * @param {import('../repositories/userSessionRepository.js').UserSessionRepository} deps.sessionRepository - Session repo.
+   * @param {object} deps.userRepository - User repo.
+   * @param {object} deps.sessionRepository - Session repo.
    */
   constructor({ userRepository, sessionRepository }) {
     this.userRepository = userRepository;

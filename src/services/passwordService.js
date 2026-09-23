@@ -53,7 +53,7 @@ function decryptTags(cipher) {
 export class PasswordService {
   /**
    * @param {object} deps - Dependencies.
-   * @param {import('../repositories/passwordEntryRepository.js').PasswordEntryRepository} deps.repository - Entry repo.
+   * @param {object} deps.repository - Entry repo.
    */
   constructor({ repository }) {
     this.repository = repository;

@@ -1,0 +1,79 @@
+name: JSDoc 文档生成
+
+# 迁移说明：原 Java 项目使用 Doxygen 生成文档；EcoVault Lite 改用 Node.js 生态更自然的
+# JSDoc（详见 docs/MIGRATION.md 中的文档工具决策）。本工作流在源码或文档变更时生成
+# JSDoc HTML 文档并上传为构建产物。
+on:
+  push:
+    branches: ['master']
+    paths:
+      - 'src/**'
+      - 'README.md'
+      - 'jsdoc.json'
+      - '.github/workflows/jsdoc.yml'
+  pull_request:
+    branches: ['master']
+    paths:
+      - 'src/**'
+      - 'README.md'
+      - 'jsdoc.json'
+      - '.github/workflows/jsdoc.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  generate-jsdoc:
+    name: 生成 JSDoc 文档
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+
+      - name: 配置 Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 生成 JSDoc 文档
+        run: npm run docs
+
+      - name: 检查生成的文档
+        run: |
+          if [ -d "docs-gen" ] && [ -n "$(find docs-gen -name '*.html' -print -quit)" ]; then
+            echo "✓ JSDoc 文档生成成功"
+            echo "HTML 文件数量: $(find docs-gen -name '*.html' | wc -l)"
+          else
+            echo "✗ JSDoc 文档生成失败"
+            exit 1
+          fi
+
+      - name: 上传 JSDoc 文档
+        uses: actions/upload-artifact@v7
+        with:
+          name: jsdoc-docs
+          path: docs-gen/
+          retention-days: 90
+
+      - name: 生成文档摘要
+        if: always()
+        run: |
+          {
+            echo "## 📚 JSDoc 文档生成报告"
+            echo
+            if [ -d "docs-gen" ]; then
+              echo "✅ 文档生成成功"
+              echo
+              echo "| 项目 | 数量 |"
+              echo "|------|------|"
+              echo "| HTML 文件 | $(find docs-gen -name '*.html' | wc -l) |"
+              echo "| 总文件数 | $(find docs-gen -type f | wc -l) |"
+            else
+              echo "❌ 文档生成失败"
+            fi
+          } >> $GITHUB_STEP_SUMMARY

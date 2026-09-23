@@ -1,0 +1,79 @@
+name: CI 构建与测试
+
+# 在提交 PR 到主分支时触发：安装依赖、执行静态检查与测试，并生成覆盖率报告产物
+on:
+  pull_request:
+    branches: ['master']
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/PULL_REQUEST_TEMPLATE.md'
+      - '.github/copilot-instructions.md'
+      - 'LICENSE'
+      - '.gitignore'
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+jobs:
+  build-and-test:
+    name: 构建与测试 (Node.js 24)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+
+      - name: 配置 Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: 安装依赖
+        run: npm ci
+
+      - name: 代码规范检查 (ESLint)
+        run: npm run lint
+
+      - name: 代码格式校验 (Prettier)
+        run: npm run format:check
+
+      # 运行 node:test 单元/集成测试并通过 c8 采集覆盖率。
+      # 说明：覆盖率阈值门禁由本地命令 `npm run test:coverage`（读取 .c8rc.json）校验；
+      # 测试套件完善前，CI 以报告模式采集覆盖率并归档为产物，避免阻断流水线。
+      - name: 运行测试并生成覆盖率报告 (c8)
+        run: >-
+          npx c8 --check-coverage=false
+          --reporter=text --reporter=text-summary
+          --reporter=lcov --reporter=json-summary
+          node --test
+
+      - name: 生成覆盖率摘要
+        if: always()
+        run: |
+          if [ -f coverage/coverage-summary.json ]; then
+            {
+              echo '## 📊 代码覆盖率'
+              echo
+              echo '| 指标 | 覆盖率 |'
+              echo '|------|--------|'
+              echo "| 语句 Statements | $(jq -r '.total.statements.pct' coverage/coverage-summary.json)% |"
+              echo "| 分支 Branches | $(jq -r '.total.branches.pct' coverage/coverage-summary.json)% |"
+              echo "| 函数 Functions | $(jq -r '.total.functions.pct' coverage/coverage-summary.json)% |"
+              echo "| 行 Lines | $(jq -r '.total.lines.pct' coverage/coverage-summary.json)% |"
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo '未找到 coverage/coverage-summary.json，跳过覆盖率摘要。' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: 上传测试与覆盖率报告
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: coverage-report
+          path: coverage/
+          retention-days: 14

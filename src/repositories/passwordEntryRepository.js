@@ -39,10 +39,10 @@ function mapEntry(row) {
  */
 export class PasswordEntryRepository {
   /**
-   * @param {import('better-sqlite3').Database} db - Database handle.
+   * @param {object} db - Database handle.
    */
   constructor(db) {
-    /** @type {import('better-sqlite3').Database} */
+    /** @type {object} */
     this.db = db;
   }
 

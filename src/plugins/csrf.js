@@ -33,8 +33,8 @@ function pathOf(url) {
 /**
  * Register the CSRF double-submit hook on a Fastify instance.
  *
- * @param {import('fastify').FastifyInstance} app - Fastify instance.
- * @param {{ exemptPaths?: string[] }} [options] - Paths exempt from enforcement.
+ * @param {object} app - Fastify instance.
+ * @param {object} [options] - Paths exempt from enforcement.
  * @returns {void}
  */
 export function registerCsrf(app, { exemptPaths = ['/api/auth/login'] } = {}) {

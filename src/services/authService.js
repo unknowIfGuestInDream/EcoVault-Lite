@@ -48,9 +48,9 @@ function truncate(value, maxLength) {
 export class AuthService {
   /**
    * @param {object} deps - Dependencies.
-   * @param {import('../repositories/userRepository.js').UserRepository} deps.userRepository - User repo.
-   * @param {import('../repositories/userSessionRepository.js').UserSessionRepository} deps.sessionRepository - Session repo.
-   * @param {typeof import('../security/jwt.js').default} deps.tokenProvider - JWT provider.
+   * @param {object} deps.userRepository - User repo.
+   * @param {object} deps.sessionRepository - Session repo.
+   * @param {object} deps.tokenProvider - JWT provider.
    * @param {number} deps.maxDevices - Maximum concurrent devices (>=1).
    */
   constructor({ userRepository, sessionRepository, tokenProvider, maxDevices }) {

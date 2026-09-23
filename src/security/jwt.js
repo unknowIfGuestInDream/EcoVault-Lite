@@ -47,13 +47,11 @@ export function generateToken({ userId, username }) {
  * Verify and decode a JWT.
  *
  * @param {string} token - Compact JWT string.
- * @returns {import('jsonwebtoken').JwtPayload} Decoded payload (`sub`, `jti`, `uid`, `iat`, `exp`).
- * @throws {import('jsonwebtoken').JsonWebTokenError} When the token is invalid or expired.
+ * @returns {object} Decoded payload (`sub`, `jti`, `uid`, `iat`, `exp`).
+ * @throws {object} When the token is invalid or expired.
  */
 export function verifyToken(token) {
-  return /** @type {import('jsonwebtoken').JwtPayload} */ (
-    jwt.verify(token, SIGNING_KEY, { algorithms: ['HS256'] })
-  );
+  return /** @type {object} */ (jwt.verify(token, SIGNING_KEY, { algorithms: ['HS256'] }));
 }
 
 export default { generateToken, verifyToken };

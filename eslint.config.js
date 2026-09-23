@@ -8,13 +8,7 @@ import prettier from 'eslint-config-prettier';
  */
 export default [
   {
-    ignores: [
-      'node_modules/**',
-      'coverage/**',
-      'docs-gen/**',
-      'data/**',
-      'public/vendor/**',
-    ],
+    ignores: ['node_modules/**', 'coverage/**', 'docs-gen/**', 'data/**', 'public/vendor/**'],
   },
   js.configs.recommended,
   {

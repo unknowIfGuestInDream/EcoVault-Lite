@@ -1,12 +1,7 @@
 {
   "all": true,
   "include": ["src/**/*.js"],
-  "exclude": [
-    "src/server.js",
-    "src/views/**",
-    "test/**",
-    "**/*.test.js"
-  ],
+  "exclude": ["src/server.js", "src/views/**", "test/**", "**/*.test.js"],
   "reporter": ["text", "text-summary", "lcov", "html"],
   "report-dir": "coverage",
   "check-coverage": true,

@@ -31,10 +31,10 @@ function mapSession(row) {
  */
 export class UserSessionRepository {
   /**
-   * @param {import('better-sqlite3').Database} db - Database handle.
+   * @param {object} db - Database handle.
    */
   constructor(db) {
-    /** @type {import('better-sqlite3').Database} */
+    /** @type {object} */
     this.db = db;
   }
 
@@ -66,7 +66,7 @@ export class UserSessionRepository {
   /**
    * Create a new active session.
    *
-   * @param {{ userId: number, jti: string, deviceInfo?: string, ip?: string }} session - Session details.
+   * @param {object} session - Session details.
    * @returns {object} The created session entity.
    */
   insert(session) {

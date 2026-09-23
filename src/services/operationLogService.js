@@ -13,7 +13,7 @@ import { BusinessError } from '../common/errors.js';
 export class OperationLogService {
   /**
    * @param {object} deps - Dependencies.
-   * @param {import('../repositories/operationLogRepository.js').OperationLogRepository} deps.repository - Log repo.
+   * @param {object} deps.repository - Log repo.
    */
   constructor({ repository }) {
     this.repository = repository;

@@ -1,0 +1,25 @@
+name: 问题
+description: 在此提出问题
+title: '[问题] '
+labels:
+  - 问题
+assignees: unknowIfGuestInDream
+body:
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 检查清单
+      description: |-
+        请确保您已遵守以下声明。
+      options:
+        - label: 我遵循了文档，并确认我已尝试搜索过该问题。
+          required: true
+
+  - type: textarea
+    id: question
+    attributes:
+      label: 描述问题
+      description: 这个问题的用途是什么
+      placeholder: 在此写下您的问题
+    validations:
+      required: true

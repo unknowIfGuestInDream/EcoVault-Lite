@@ -28,16 +28,16 @@ import { RolePermissionService } from './services/rolePermissionService.js';
 
 /**
  * @typedef {object} AppContext
- * @property {import('better-sqlite3').Database} db - Database handle.
+ * @property {object} db - Database handle.
  * @property {object} repositories - The repository instances.
  * @property {object} services - The service instances.
- * @property {typeof tokenProvider} tokenProvider - JWT provider.
+ * @property {object} tokenProvider - JWT provider.
  */
 
 /**
  * Build an application context (repositories + services) from a db handle.
  *
- * @param {import('better-sqlite3').Database} db - Database handle.
+ * @param {object} db - Database handle.
  * @returns {AppContext} The wired context.
  */
 export function createContext(db) {

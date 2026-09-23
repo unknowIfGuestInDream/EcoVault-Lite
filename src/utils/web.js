@@ -23,7 +23,7 @@ function isUsable(value) {
  * 2. `X-Real-IP`, when usable.
  * 3. The socket remote address.
  *
- * @param {import('fastify').FastifyRequest} [request] - Incoming request.
+ * @param {object} [request] - Incoming request.
  * @returns {string} The resolved client IP, or "unknown".
  */
 export function getClientIp(request) {
