@@ -4,7 +4,7 @@ EcoVault Lite 是个人数据安全存储与智能管理平台，基于 **Node.j
 打造，面向单机部署场景提供低资源占用、易运维的安全数据管理能力。
 项目采用分层架构与本地数据库，兼顾敏感数据保护、权限控制、操作审计与日常使用体验。
 
-> 架构设计、分层职责与核心安全策略详见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。
+> 架构设计、分层职责与核心安全策略详见 [`docs/ARCHITECTURE.md`](https://github.com/unknowIfGuestInDream/EcoVault-Lite/blob/master/docs/ARCHITECTURE.md)。
 
 ## 技术栈
 
@@ -80,7 +80,7 @@ npm run dev
 
 ## 配置项
 
-所有配置通过环境变量提供，参见 [`.env.example`](.env.example)。关键项：
+所有配置通过环境变量提供，参见 [`.env.example`](https://github.com/unknowIfGuestInDream/EcoVault-Lite/blob/master/.env.example)。关键项：
 
 | 变量 | 默认值 | 说明 |
 | --- | --- | --- |
@@ -96,4 +96,4 @@ npm run dev
 
 ## 许可证
 
-本项目基于 [MIT License](LICENSE) 开源。
+本项目基于 [MIT License](https://github.com/unknowIfGuestInDream/EcoVault-Lite/blob/master/LICENSE) 开源。
