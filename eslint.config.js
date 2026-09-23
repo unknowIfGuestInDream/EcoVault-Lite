@@ -3,8 +3,8 @@ import globals from 'globals';
 import prettier from 'eslint-config-prettier';
 
 /**
- * ESLint flat configuration for EcoVault Lite.
- * Uses the recommended ruleset and disables rules that conflict with Prettier.
+ * EcoVault Lite 的 ESLint 扁平化配置。
+ * 采用推荐规则集，并关闭与 Prettier 冲突的规则。
  */
 export default [
   {
@@ -32,6 +32,15 @@ export default [
     languageOptions: {
       globals: {
         ...globals.node,
+      },
+    },
+  },
+  {
+    files: ['public/**/*.js'],
+    languageOptions: {
+      sourceType: 'script',
+      globals: {
+        ...globals.browser,
       },
     },
   },

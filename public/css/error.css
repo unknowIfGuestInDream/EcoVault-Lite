@@ -1,0 +1,33 @@
+.error-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.error-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px 32px;
+  text-align: center;
+}
+
+.error-card__code {
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.error-card__title {
+  margin: 10px 0 26px;
+  font-size: 22px;
+}
+
+.error-card__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
