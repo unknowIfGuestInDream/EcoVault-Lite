@@ -1,30 +1,30 @@
 import bcrypt from 'bcryptjs';
 
 /**
- * @file BCrypt password hashing helpers.
+ * @file BCrypt 密码哈希辅助工具。
  *
- * Uses bcryptjs (a pure-JS, drop-in compatible implementation of BCrypt) so the
- * generated hashes remain interoperable with Spring Security's `BCryptPasswordEncoder`.
+ * 使用 bcryptjs（BCrypt 的纯 JS、直接兼容实现），因此
+ * 生成的哈希仍可与 Spring Security 的 `BCryptPasswordEncoder` 互操作。
  */
 
 const SALT_ROUNDS = 10;
 
 /**
- * Hash a raw password using BCrypt.
+ * 使用 BCrypt 对原始密码进行哈希。
  *
- * @param {string} rawPassword - Plain text password.
- * @returns {string} BCrypt hash (synchronous).
+ * @param {string} rawPassword - 明文密码。
+ * @returns {string} BCrypt 哈希（同步）。
  */
 export function hashPassword(rawPassword) {
   return bcrypt.hashSync(rawPassword, SALT_ROUNDS);
 }
 
 /**
- * Verify a raw password against a stored BCrypt hash.
+ * 根据存储的 BCrypt 哈希校验原始密码。
  *
- * @param {string} rawPassword - Plain text password.
- * @param {string} storedHash - Previously generated BCrypt hash.
- * @returns {boolean} True when the password matches.
+ * @param {string} rawPassword - 明文密码。
+ * @param {string} storedHash - 先前生成的 BCrypt 哈希。
+ * @returns {boolean} 密码匹配时返回 true。
  */
 export function verifyPassword(rawPassword, storedHash) {
   if (!storedHash) {

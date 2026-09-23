@@ -1,17 +1,17 @@
 /**
- * @file Exact monetary arithmetic helpers.
+ * @file 精确金额算术辅助工具。
  *
- * The Java implementation uses `BigDecimal` with scale 2 and `HALF_UP` rounding.
- * To avoid binary floating-point drift we represent money internally as an
- * integer number of cents and only convert to a JavaScript number at the JSON
- * boundary (which matches Jackson serialising `BigDecimal` as a number).
+ * Java 实现使用 scale 2 和 `HALF_UP` 舍入的 `BigDecimal`。
+ * 为避免二进制浮点漂移，我们在内部将金额表示为
+ * 整数分，并且只在 JSON
+ * 边界转换为 JavaScript 数字（匹配 Jackson 将 `BigDecimal` 序列化为数字的行为）。
  */
 
 /**
- * Convert a decimal money value to integer cents using HALF_UP rounding.
+ * 使用 HALF_UP 舍入将十进制金额值转换为整数分。
  *
- * @param {number | string | null | undefined} value - Money value.
- * @returns {number} Integer cents (0 when the value is null/undefined/blank).
+ * @param {number | string | null | undefined} value - 金额值。
+ * @returns {number} 整数分（值为 null/undefined/blank 时为 0）。
  */
 export function toCents(value) {
   if (value === null || value === undefined || value === '') {
@@ -21,17 +21,17 @@ export function toCents(value) {
   if (!Number.isFinite(num)) {
     return 0;
   }
-  // Scale to cents then round HALF_UP (away from zero on ties).
+  // 缩放为分后按 HALF_UP 舍入（平局时远离零）。
   const scaled = num * 100;
   const rounded = Math.sign(scaled) * Math.round(Math.abs(scaled) + Number.EPSILON);
   return Math.trunc(rounded);
 }
 
 /**
- * Convert integer cents to a JavaScript number with 2-decimal precision.
+ * 将整数分转换为具有 2 位小数精度的 JavaScript 数字。
  *
- * @param {number | null | undefined} cents - Integer cents.
- * @returns {number} Money value (e.g. 1234.56). Null/undefined becomes 0.
+ * @param {number | null | undefined} cents - 整数分。
+ * @returns {number} 金额值（例如 1234.56）。Null/undefined 会变为 0。
  */
 export function fromCents(cents) {
   if (cents === null || cents === undefined) {
@@ -41,31 +41,31 @@ export function fromCents(cents) {
 }
 
 /**
- * Format integer cents as a fixed 2-decimal string (used for CSV export).
+ * 将整数分格式化为固定 2 位小数字符串（用于 CSV 导出）。
  *
- * @param {number | null | undefined} cents - Integer cents.
- * @returns {string} Fixed 2-decimal representation (e.g. "1234.56").
+ * @param {number | null | undefined} cents - 整数分。
+ * @returns {string} 固定 2 位小数表示（例如 "1234.56"）。
  */
 export function formatCents(cents) {
   return (Math.round(cents ?? 0) / 100).toFixed(2);
 }
 
 /**
- * Sum a list of cent values.
+ * 汇总一组分值。
  *
- * @param {...number} values - Cent values.
- * @returns {number} Total cents.
+ * @param {...number} values - 分值。
+ * @returns {number} 总分值。
  */
 export function sumCents(...values) {
   return values.reduce((total, value) => total + (value ?? 0), 0);
 }
 
 /**
- * Divide a cents total by a count and round HALF_UP to the nearest cent.
+ * 将总分值除以计数，并按 HALF_UP 舍入到最接近的分。
  *
- * @param {number} totalCents - Numerator in cents.
- * @param {number} count - Divisor (number of items).
- * @returns {number} Averaged cents (0 when count <= 0).
+ * @param {number} totalCents - 以分表示的分子。
+ * @param {number} count - 除数（条目数）。
+ * @returns {number} 平均分值（count <= 0 时为 0）。
  */
 export function averageCents(totalCents, count) {
   if (!count || count <= 0) {

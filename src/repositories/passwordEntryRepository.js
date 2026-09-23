@@ -1,17 +1,17 @@
 import { nowDateTime } from '../utils/datetime.js';
 
 /**
- * @file Password vault entry repository.
+ * @file 密码保险箱条目仓储。
  *
- * The `secret`, `notes` and `tags` columns hold AES-encrypted payloads; the
- * repository is agnostic to their contents and simply persists strings.
+ * `secret`、`notes` 和 `tags` 列保存 AES 加密载荷；
+ * 仓储不感知其内容，仅持久化字符串。
  */
 
 /**
- * Map a raw row to a password-entry entity.
+ * 将原始行映射为密码条目实体。
  *
- * @param {object | undefined} row - Raw row.
- * @returns {object | null} Entity or null.
+ * @param {object | undefined} row - 原始行。
+ * @returns {object | null} 实体或 null。
  */
 function mapEntry(row) {
   if (!row) {
@@ -35,11 +35,11 @@ function mapEntry(row) {
 }
 
 /**
- * Repository for the `password_entries` table.
+ * `password_entries` 表的仓储。
  */
 export class PasswordEntryRepository {
   /**
-   * @param {object} db - Database handle.
+   * @param {object} db - 数据库句柄。
    */
   constructor(db) {
     /** @type {object} */
@@ -47,10 +47,10 @@ export class PasswordEntryRepository {
   }
 
   /**
-   * List a user's entries ordered by most recently updated.
+   * 列出用户条目，按最近更新时间排序。
    *
-   * @param {number} userId - Owner id.
-   * @returns {object[]} Entities.
+   * @param {number} userId - 所有者 id。
+   * @returns {object[]} 实体。
    */
   findByUser(userId) {
     return this.db
@@ -60,11 +60,11 @@ export class PasswordEntryRepository {
   }
 
   /**
-   * Case-insensitive title search within a user's entries.
+   * 在用户条目中执行不区分大小写的标题搜索。
    *
-   * @param {number} userId - Owner id.
-   * @param {string} keyword - Title fragment.
-   * @returns {object[]} Matching entities.
+   * @param {number} userId - 所有者 id。
+   * @param {string} keyword - 标题片段。
+   * @returns {object[]} 匹配的实体。
    */
   searchByTitle(userId, keyword) {
     return this.db
@@ -77,11 +77,11 @@ export class PasswordEntryRepository {
   }
 
   /**
-   * Find one entry scoped to its owner.
+   * 查找归属指定所有者的单个条目。
    *
-   * @param {number} id - Entry id.
-   * @param {number} userId - Owner id.
-   * @returns {object | null} Entity or null.
+   * @param {number} id - 条目 id。
+   * @param {number} userId - 所有者 id。
+   * @returns {object | null} 实体或 null。
    */
   findByIdAndUser(id, userId) {
     return mapEntry(
@@ -90,10 +90,10 @@ export class PasswordEntryRepository {
   }
 
   /**
-   * Insert a new entry.
+   * 插入新条目。
    *
-   * @param {object} entry - Entry fields.
-   * @returns {object} The inserted entity.
+   * @param {object} entry - 条目字段。
+   * @returns {object} 已插入的实体。
    */
   insert(entry) {
     const now = nowDateTime();
@@ -121,12 +121,12 @@ export class PasswordEntryRepository {
   }
 
   /**
-   * Update an existing entry.
+   * 更新现有条目。
    *
-   * @param {number} id - Entry id.
-   * @param {number} userId - Owner id.
-   * @param {object} fields - Fields to persist.
-   * @returns {object | null} Updated entity.
+   * @param {number} id - 条目 id。
+   * @param {number} userId - 所有者 id。
+   * @param {object} fields - 要持久化的字段。
+   * @returns {object | null} 已更新的实体。
    */
   update(id, userId, fields) {
     this.db
@@ -154,11 +154,11 @@ export class PasswordEntryRepository {
   }
 
   /**
-   * Delete an entry scoped to its owner.
+   * 删除归属指定所有者的条目。
    *
-   * @param {number} id - Entry id.
-   * @param {number} userId - Owner id.
-   * @returns {boolean} True when a row was deleted.
+   * @param {number} id - 条目 id。
+   * @param {number} userId - 所有者 id。
+   * @returns {boolean} 删除了一行时为 true。
    */
   deleteByIdAndUser(id, userId) {
     return (

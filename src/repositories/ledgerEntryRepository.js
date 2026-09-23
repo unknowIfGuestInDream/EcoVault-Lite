@@ -1,18 +1,18 @@
 import { nowDateTime } from '../utils/datetime.js';
 
 /**
- * @file Income/expense ledger repository.
+ * @file 收入/支出账本仓储。
  *
- * Tags live in the `ledger_entry_tags` child table (mirroring the Java
- * `@ElementCollection`). Amounts are stored and returned as integer cents.
+ * 标签存放在 `ledger_entry_tags` 子表中（对应 Java
+ * `@ElementCollection`）。金额以整数分存储并返回。
  */
 
 /**
- * Repository for the `ledger_entries` table and its tag collection.
+ * `ledger_entries` 表及其标签集合的仓储。
  */
 export class LedgerEntryRepository {
   /**
-   * @param {object} db - Database handle.
+   * @param {object} db - 数据库句柄。
    */
   constructor(db) {
     /** @type {object} */
@@ -20,10 +20,10 @@ export class LedgerEntryRepository {
   }
 
   /**
-   * Load the ordered tag set for an entry.
+   * 加载条目的有序标签集合。
    *
-   * @param {number} entryId - Entry id.
-   * @returns {string[]} Tags (insertion order).
+   * @param {number} entryId - 条目 id。
+   * @returns {string[]} 标签（插入顺序）。
    */
   #loadTags(entryId) {
     return this.db
@@ -33,10 +33,10 @@ export class LedgerEntryRepository {
   }
 
   /**
-   * Map a raw row plus its tags to a ledger entity.
+   * 将原始行及其标签映射到账本实体。
    *
-   * @param {object | undefined} row - Raw row.
-   * @returns {object | null} Entity or null.
+   * @param {object | undefined} row - 原始行。
+   * @returns {object | null} 实体或 null。
    */
   #map(row) {
     if (!row) {
@@ -56,10 +56,10 @@ export class LedgerEntryRepository {
   }
 
   /**
-   * Replace the tag set of an entry.
+   * 替换条目的标签集合。
    *
-   * @param {number} entryId - Entry id.
-   * @param {Iterable<string>} tags - New tags (deduplicated, blanks removed).
+   * @param {number} entryId - 条目 id。
+   * @param {Iterable<string>} tags - 新标签（去重并移除空白项）。
    * @returns {void}
    */
   #replaceTags(entryId, tags) {
@@ -79,11 +79,11 @@ export class LedgerEntryRepository {
   }
 
   /**
-   * Find one entry scoped to its owner.
+   * 查找归属指定所有者的单个条目。
    *
-   * @param {number} id - Entry id.
-   * @param {number} userId - Owner id.
-   * @returns {object | null} Entity or null.
+   * @param {number} id - 条目 id。
+   * @param {number} userId - 所有者 id。
+   * @returns {object | null} 实体或 null。
    */
   findByIdAndUser(id, userId) {
     return this.#map(
@@ -92,15 +92,15 @@ export class LedgerEntryRepository {
   }
 
   /**
-   * Multi-condition search for a user's entries.
+   * 对用户条目执行多条件搜索。
    *
-   * @param {object} params - Filters.
-   * @param {number} params.userId - Owner id (required).
-   * @param {string} [params.type] - Ledger type filter.
-   * @param {string} [params.start] - Inclusive start date (yyyy-MM-dd).
-   * @param {string} [params.end] - Inclusive end date (yyyy-MM-dd).
-   * @param {string} [params.tag] - Exact tag filter.
-   * @returns {object[]} Matching entities ordered by date then id descending.
+   * @param {object} params - 过滤条件。
+   * @param {number} params.userId - 所有者 id（必填）。
+   * @param {string} [params.type] - 账本类型过滤条件。
+   * @param {string} [params.start] - 起始日期（含，yyyy-MM-dd）。
+   * @param {string} [params.end] - 结束日期（含，yyyy-MM-dd）。
+   * @param {string} [params.tag] - 精确标签过滤条件。
+   * @returns {object[]} 匹配的实体，按日期再按 id 降序排序。
    */
   search({ userId, type, start, end, tag }) {
     const clauses = ['e.user_id = @userId'];
@@ -134,10 +134,10 @@ export class LedgerEntryRepository {
   }
 
   /**
-   * Insert a new ledger entry with its tags.
+   * 插入带有标签的新账本条目。
    *
-   * @param {object} entry - Entry fields (amount as cents).
-   * @returns {object} The inserted entity.
+   * @param {object} entry - 条目字段（金额以分为单位）。
+   * @returns {object} 已插入的实体。
    */
   insert(entry) {
     const now = nowDateTime();
@@ -161,12 +161,12 @@ export class LedgerEntryRepository {
   }
 
   /**
-   * Update an existing ledger entry and its tags.
+   * 更新现有账本条目及其标签。
    *
-   * @param {number} id - Entry id.
-   * @param {number} userId - Owner id.
-   * @param {object} entry - Entry fields (amount as cents).
-   * @returns {object | null} Updated entity.
+   * @param {number} id - 条目 id。
+   * @param {number} userId - 所有者 id。
+   * @param {object} entry - 条目字段（金额以分为单位）。
+   * @returns {object | null} 已更新的实体。
    */
   update(id, userId, entry) {
     this.db
@@ -188,11 +188,11 @@ export class LedgerEntryRepository {
   }
 
   /**
-   * Delete an entry (and cascade its tags) scoped to its owner.
+   * 删除归属指定所有者的条目（并级联删除其标签）。
    *
-   * @param {number} id - Entry id.
-   * @param {number} userId - Owner id.
-   * @returns {boolean} True when a row was deleted.
+   * @param {number} id - 条目 id。
+   * @param {number} userId - 所有者 id。
+   * @returns {boolean} 删除了一行时为 true。
    */
   deleteByIdAndUser(id, userId) {
     return (

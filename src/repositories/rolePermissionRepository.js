@@ -1,13 +1,13 @@
 /**
- * @file Role-permission repository (RBAC page grants).
+ * @file 角色-权限仓储（RBAC 页面授权）。
  */
 
 /**
- * Repository for the `role_permissions` table.
+ * `role_permissions` 表的仓储。
  */
 export class RolePermissionRepository {
   /**
-   * @param {object} db - Database handle.
+   * @param {object} db - 数据库句柄。
    */
   constructor(db) {
     /** @type {object} */
@@ -15,10 +15,10 @@ export class RolePermissionRepository {
   }
 
   /**
-   * List permission rows for a role.
+   * 列出角色的权限行。
    *
-   * @param {string} role - Role name.
-   * @returns {Array<{ id: number, role: string, pageKey: string }>} Permission rows.
+   * @param {string} role - 角色名称。
+   * @returns {Array<{ id: number, role: string, pageKey: string }>} 权限行。
    */
   findByRole(role) {
     return this.db
@@ -29,10 +29,10 @@ export class RolePermissionRepository {
   }
 
   /**
-   * List the page keys granted to a role.
+   * 列出授予角色的页面键。
    *
-   * @param {string} role - Role name.
-   * @returns {string[]} Granted page keys.
+   * @param {string} role - 角色名称。
+   * @returns {string[]} 已授予的页面键。
    */
   findPageKeysByRole(role) {
     return this.db
@@ -42,10 +42,10 @@ export class RolePermissionRepository {
   }
 
   /**
-   * Whether any permission row exists for a role.
+   * 角色是否存在任意权限行。
    *
-   * @param {string} role - Role name.
-   * @returns {boolean} True when at least one row exists.
+   * @param {string} role - 角色名称。
+   * @returns {boolean} 至少存在一行时为 true。
    */
   existsByRole(role) {
     return Boolean(
@@ -54,20 +54,20 @@ export class RolePermissionRepository {
   }
 
   /**
-   * Delete all permission rows for a role.
+   * 删除角色的所有权限行。
    *
-   * @param {string} role - Role name.
-   * @returns {number} Number of rows deleted.
+   * @param {string} role - 角色名称。
+   * @returns {number} 已删除的行数。
    */
   deleteByRole(role) {
     return this.db.prepare('DELETE FROM role_permissions WHERE role = ?').run(role).changes;
   }
 
   /**
-   * Grant a single page to a role (idempotent).
+   * 向角色授予单个页面（幂等）。
    *
-   * @param {string} role - Role name.
-   * @param {string} pageKey - Page key.
+   * @param {string} role - 角色名称。
+   * @param {string} pageKey - 页面键。
    * @returns {void}
    */
   insert(role, pageKey) {
@@ -77,10 +77,10 @@ export class RolePermissionRepository {
   }
 
   /**
-   * Replace the whole permission set of a role atomically.
+   * 以原子方式替换角色的完整权限集合。
    *
-   * @param {string} role - Role name.
-   * @param {Iterable<string>} pageKeys - Page keys to grant.
+   * @param {string} role - 角色名称。
+   * @param {Iterable<string>} pageKeys - 要授予的页面键。
    * @returns {void}
    */
   replaceForRole(role, pageKeys) {

@@ -18,27 +18,27 @@ import { AdminService } from './services/adminService.js';
 import { RolePermissionService } from './services/rolePermissionService.js';
 
 /**
- * @file Application context / dependency-injection wiring.
+ * @file 应用上下文/依赖注入装配。
  *
- * Builds the repository and service object graph from a single database handle.
- * The production entry point uses the shared singleton database; tests build a
- * context around an in-memory database for full isolation. This mirrors the
- * Spring dependency-injection container from the original Java application.
+ * 从单个数据库句柄构建仓储和服务对象图。
+ * 生产入口使用共享的单例数据库；测试会围绕
+ * 内存数据库构建上下文以实现完全隔离。这对应了
+ * 原 Java 应用中的 Spring 依赖注入容器。
  */
 
 /**
  * @typedef {object} AppContext
- * @property {object} db - Database handle.
- * @property {object} repositories - The repository instances.
- * @property {object} services - The service instances.
- * @property {object} tokenProvider - JWT provider.
+ * @property {object} db - 数据库句柄。
+ * @property {object} repositories - 仓储实例。
+ * @property {object} services - 服务实例。
+ * @property {object} tokenProvider - JWT 提供方。
  */
 
 /**
- * Build an application context (repositories + services) from a db handle.
+ * 从 db 句柄构建应用上下文（仓储 + 服务）。
  *
- * @param {object} db - Database handle.
- * @returns {AppContext} The wired context.
+ * @param {object} db - 数据库句柄。
+ * @returns {AppContext} 已装配的上下文。
  */
 export function createContext(db) {
   const repositories = {

@@ -3,19 +3,19 @@ import { Role } from '../domain/role.js';
 import { hashPassword, verifyPassword } from '../security/passwordHash.js';
 
 /**
- * @file Authentication and account service.
+ * @file 认证与账号服务。
  *
- * Reproduces the Java `AuthServiceImpl`: registration, login with single/limited
- * device enforcement, logout, profile update, password change (which revokes all
- * sessions) and the privacy-mode password verification.
+ * 复现 Java `AuthServiceImpl`：注册、支持单设备/受限
+ * 设备约束的登录、登出、资料更新、密码修改（会吊销所有
+ * 会话）以及隐私模式密码校验。
  */
 
 /**
- * Parse and validate a role string.
+ * 解析并校验角色字符串。
  *
- * @param {string | null | undefined} role - Raw role.
- * @returns {string} A valid role (defaults to USER).
- * @throws {BusinessError} When the role is non-empty but invalid.
+ * @param {string | null | undefined} role - 原始角色。
+ * @returns {string} 有效角色（默认为 USER）。
+ * @throws {BusinessError} 当角色非空但无效时。
  */
 function parseRole(role) {
   if (role === null || role === undefined || String(role).trim() === '') {
@@ -29,11 +29,11 @@ function parseRole(role) {
 }
 
 /**
- * Truncate a string to a maximum length.
+ * 将字符串截断到最大长度。
  *
- * @param {string | null | undefined} value - Source value.
- * @param {number} maxLength - Maximum length.
- * @returns {string | null} Truncated value or null.
+ * @param {string | null | undefined} value - 源值。
+ * @param {number} maxLength - 最大长度。
+ * @returns {string | null} 截断后的值或 null。
  */
 function truncate(value, maxLength) {
   if (value === null || value === undefined) {
@@ -43,15 +43,15 @@ function truncate(value, maxLength) {
 }
 
 /**
- * Authentication service.
+ * 认证服务。
  */
 export class AuthService {
   /**
-   * @param {object} deps - Dependencies.
-   * @param {object} deps.userRepository - User repo.
-   * @param {object} deps.sessionRepository - Session repo.
-   * @param {object} deps.tokenProvider - JWT provider.
-   * @param {number} deps.maxDevices - Maximum concurrent devices (>=1).
+   * @param {object} deps - 依赖项。
+   * @param {object} deps.userRepository - 用户仓储。
+   * @param {object} deps.sessionRepository - 会话仓储。
+   * @param {object} deps.tokenProvider - JWT 提供器。
+   * @param {number} deps.maxDevices - 最大并发设备数（>=1）。
    */
   constructor({ userRepository, sessionRepository, tokenProvider, maxDevices }) {
     this.userRepository = userRepository;
@@ -61,11 +61,11 @@ export class AuthService {
   }
 
   /**
-   * Register a new user.
+   * 注册新用户。
    *
-   * @param {object} request - Registration request (username, password, nickname, email, role).
-   * @returns {object} The created user entity.
-   * @throws {BusinessError} When the username already exists or role is invalid.
+   * @param {object} request - 注册请求（username、password、nickname、email、role）。
+   * @returns {object} 创建的用户实体。
+   * @throws {BusinessError} 当用户名已存在或角色无效时。
    */
   register(request) {
     if (this.userRepository.existsByUsername(request.username)) {
@@ -88,13 +88,13 @@ export class AuthService {
   }
 
   /**
-   * Authenticate a user and issue a session token.
+   * 认证用户并签发会话令牌。
    *
-   * @param {object} request - Login request (username, password).
-   * @param {string} [deviceInfo] - Device/user-agent string.
-   * @param {string} [ip] - Client IP.
-   * @returns {{ response: object, token: string, expiresAt: number }} Login result and cookie token.
-   * @throws {BusinessError} On invalid credentials or disabled account.
+   * @param {object} request - 登录请求（username、password）。
+   * @param {string} [deviceInfo] - 设备/user-agent 字符串。
+   * @param {string} [ip] - 客户端 IP。
+   * @returns {{ response: object, token: string, expiresAt: number }} 登录结果和 cookie 令牌。
+   * @throws {BusinessError} 当凭据无效或账号被禁用时。
    */
   login(request, deviceInfo, ip) {
     const user = this.userRepository.findByUsername(request.username);
@@ -128,9 +128,9 @@ export class AuthService {
   }
 
   /**
-   * Enforce the device limit by revoking the oldest active sessions.
+   * 通过吊销最旧的活跃会话来执行设备限制。
    *
-   * @param {number} userId - User id.
+   * @param {number} userId - 用户 id。
    * @returns {void}
    */
   #enforceDeviceLimit(userId) {
@@ -143,9 +143,9 @@ export class AuthService {
   }
 
   /**
-   * Invalidate a session by its token id.
+   * 通过令牌 id 使会话失效。
    *
-   * @param {string | null} jti - Token id.
+   * @param {string | null} jti - 令牌 id。
    * @returns {void}
    */
   logout(jti) {
@@ -156,12 +156,12 @@ export class AuthService {
   }
 
   /**
-   * Update the profile (nickname/email) of a user.
+   * 更新用户资料（nickname/email）。
    *
-   * @param {number} userId - User id.
-   * @param {object} request - Update request (nickname, email).
-   * @returns {object} The updated user entity.
-   * @throws {BusinessError} When the user does not exist.
+   * @param {number} userId - 用户 id。
+   * @param {object} request - 更新请求（nickname、email）。
+   * @returns {object} 更新后的用户实体。
+   * @throws {BusinessError} 当用户不存在时。
    */
   updateProfile(userId, request) {
     const user = this.userRepository.findById(userId);
@@ -180,12 +180,12 @@ export class AuthService {
   }
 
   /**
-   * Change a user's password and revoke all of their active sessions.
+   * 修改用户密码并吊销其所有活跃会话。
    *
-   * @param {number} userId - User id.
-   * @param {object} request - Change request (oldPassword, newPassword).
+   * @param {number} userId - 用户 id。
+   * @param {object} request - 修改请求（oldPassword、newPassword）。
    * @returns {void}
-   * @throws {BusinessError} When the user does not exist or the old password is wrong.
+   * @throws {BusinessError} 当用户不存在或旧密码错误时。
    */
   changePassword(userId, request) {
     const user = this.userRepository.findById(userId);
@@ -200,12 +200,12 @@ export class AuthService {
   }
 
   /**
-   * Verify a user's password without issuing a token (privacy-mode unlock).
+   * 校验用户密码但不签发令牌（隐私模式解锁）。
    *
-   * @param {number} userId - User id.
-   * @param {string} rawPassword - Password to verify.
+   * @param {number} userId - 用户 id。
+   * @param {string} rawPassword - 要校验的密码。
    * @returns {void}
-   * @throws {BusinessError} When the user does not exist or the password is wrong.
+   * @throws {BusinessError} 当用户不存在或密码错误时。
    */
   verifyPassword(userId, rawPassword) {
     const user = this.userRepository.findById(userId);

@@ -3,14 +3,14 @@ import * as salaryCalc from '../domain/salaryCalc.js';
 import { fromCents, formatCents, sumCents, averageCents } from '../utils/money.js';
 
 /**
- * @file Salary service.
+ * @file 工资服务。
  *
- * Reproduces the Java `SalaryServiceImpl`: upsert-by-(year,month), statistics
- * that separate the annual bonus from monthly records, 26-column CSV export
- * (with stored/derived columns) and a quote-aware CSV importer.
+ * 复现 Java `SalaryServiceImpl`：按 (year,month) upsert、统计
+ * 将年终奖与月度记录分离、26 列 CSV 导出
+ * （包含存储/派生列）以及可感知引号的 CSV 导入器。
  */
 
-/** The list of the eight earning component keys, in CSV/statistics order. */
+/** 八个收入组成键的列表，按 CSV/统计顺序排列。 */
 const EARNING_KEYS = [
   'baseSalary',
   'performanceSalary',
@@ -23,11 +23,11 @@ const EARNING_KEYS = [
 ];
 
 /**
- * Parse a money cell (yuan string) into integer cents.
+ * 将金额单元格（元字符串）解析为整数分。
  *
- * @param {string | null | undefined} cell - Raw cell.
- * @returns {number} Cents (0 when blank).
- * @throws {BusinessError} When the value is not a valid number.
+ * @param {string | null | undefined} cell - 原始单元格。
+ * @returns {number} 整数分（为空时为 0）。
+ * @throws {BusinessError} 当值不是有效数字时。
  */
 function parseMoneyCell(cell) {
   if (cell === null || cell === undefined || String(cell).trim() === '') {
@@ -41,13 +41,13 @@ function parseMoneyCell(cell) {
 }
 
 /**
- * Parse an integer cell.
+ * 解析整数单元格。
  *
- * @param {string} cell - Raw cell.
- * @param {number} lineNum - 1-based line number (for error messages).
- * @param {string} colName - Column name (for error messages).
- * @returns {number} Parsed integer.
- * @throws {BusinessError} When the value is not an integer.
+ * @param {string} cell - 原始单元格。
+ * @param {number} lineNum - 从 1 开始的行号（用于错误消息）。
+ * @param {string} colName - 列名（用于错误消息）。
+ * @returns {number} 解析后的整数。
+ * @throws {BusinessError} 当值不是整数时。
  */
 function parseIntCell(cell, lineNum, colName) {
   const trimmed = String(cell).trim();
@@ -58,10 +58,10 @@ function parseIntCell(cell, lineNum, colName) {
 }
 
 /**
- * Escape a value for CSV output.
+ * 转义用于 CSV 输出的值。
  *
- * @param {string | null | undefined} value - Raw value.
- * @returns {string} Escaped value.
+ * @param {string | null | undefined} value - 原始值。
+ * @returns {string} 转义后的值。
  */
 function escapeCsv(value) {
   if (value === null || value === undefined || value === '') {
@@ -75,10 +75,10 @@ function escapeCsv(value) {
 }
 
 /**
- * Un-escape a quoted CSV cell.
+ * 反转义带引号的 CSV 单元格。
  *
- * @param {string | null | undefined} cell - Raw cell.
- * @returns {string} Un-escaped value.
+ * @param {string | null | undefined} cell - 原始单元格。
+ * @returns {string} 反转义后的值。
  */
 function unescapeCsv(cell) {
   if (cell === null || cell === undefined) {
@@ -92,10 +92,10 @@ function unescapeCsv(cell) {
 }
 
 /**
- * Parse a single CSV line into fields honouring quotes and escaped quotes.
+ * 将单行 CSV 解析为字段，并遵循引号和转义引号。
  *
- * @param {string} line - CSV line.
- * @returns {string[]} Parsed fields.
+ * @param {string} line - CSV 行。
+ * @returns {string[]} 解析后的字段。
  */
 function parseCsvLine(line) {
   const fields = [];
@@ -128,23 +128,23 @@ function parseCsvLine(line) {
 }
 
 /**
- * Salary service.
+ * 工资服务。
  */
 export class SalaryService {
   /**
-   * @param {object} deps - Dependencies.
-   * @param {object} deps.repository - Salary repo.
+   * @param {object} deps - 依赖项。
+   * @param {object} deps.repository - 工资仓储。
    */
   constructor({ repository }) {
     this.repository = repository;
   }
 
   /**
-   * Insert or update a salary record for (userId, year, month).
+   * 为 (userId, year, month) 插入或更新工资记录。
    *
-   * @param {number} userId - Owner id.
-   * @param {object} request - Salary request.
-   * @returns {object} Salary response.
+   * @param {number} userId - 所有者 id。
+   * @param {object} request - 工资请求。
+   * @returns {object} 工资响应。
    */
   save(userId, request) {
     const existing = this.repository.findByUserYearMonth(userId, request.year, request.month);
@@ -156,13 +156,13 @@ export class SalaryService {
   }
 
   /**
-   * Update a salary record by id.
+   * 按 id 更新工资记录。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} id - Record id.
-   * @param {object} request - Salary request.
-   * @returns {object} Salary response.
-   * @throws {BusinessError} When the record does not exist.
+   * @param {number} userId - 所有者 id。
+   * @param {number} id - 记录 id。
+   * @param {object} request - 工资请求。
+   * @returns {object} 工资响应。
+   * @throws {BusinessError} 当记录不存在时。
    */
   update(userId, id, request) {
     const existing = this.repository.findByIdAndUser(id, userId);
@@ -174,12 +174,12 @@ export class SalaryService {
   }
 
   /**
-   * Delete a salary record by id.
+   * 按 id 删除工资记录。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} id - Record id.
+   * @param {number} userId - 所有者 id。
+   * @param {number} id - 记录 id。
    * @returns {void}
-   * @throws {BusinessError} When the record does not exist.
+   * @throws {BusinessError} 当记录不存在时。
    */
   delete(userId, id) {
     const existing = this.repository.findByIdAndUser(id, userId);
@@ -190,24 +190,24 @@ export class SalaryService {
   }
 
   /**
-   * List salary records for a (optional) year range.
+   * 列出（可选）年份范围内的工资记录。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} [startYear] - Optional start year.
-   * @param {number} [endYear] - Optional end year.
-   * @returns {object[]} Salary responses.
+   * @param {number} userId - 所有者 id。
+   * @param {number} [startYear] - 可选起始年份。
+   * @param {number} [endYear] - 可选结束年份。
+   * @returns {object[]} 工资响应。
    */
   list(userId, startYear, endYear) {
     return this.#query(userId, startYear, endYear).map((record) => this.#toResponse(record));
   }
 
   /**
-   * Compute salary statistics for a (optional) year range.
+   * 计算（可选）年份范围内的工资统计。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} [startYear] - Optional start year.
-   * @param {number} [endYear] - Optional end year.
-   * @returns {object} Salary statistics.
+   * @param {number} userId - 所有者 id。
+   * @param {number} [startYear] - 可选起始年份。
+   * @param {number} [endYear] - 可选结束年份。
+   * @returns {object} 工资统计。
    */
   statistics(userId, startYear, endYear) {
     const all = this.#query(userId, startYear, endYear);
@@ -265,12 +265,12 @@ export class SalaryService {
   }
 
   /**
-   * Export salary records as CSV plus a suggested filename.
+   * 将工资记录导出为 CSV，并提供建议文件名。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} [startYear] - Optional start year.
-   * @param {number} [endYear] - Optional end year.
-   * @returns {{ csv: string, filename: string }} CSV payload and filename.
+   * @param {number} userId - 所有者 id。
+   * @param {number} [startYear] - 可选起始年份。
+   * @param {number} [endYear] - 可选结束年份。
+   * @returns {{ csv: string, filename: string }} CSV 载荷和文件名。
    */
   exportCsv(userId, startYear, endYear) {
     const records = this.#query(userId, startYear, endYear);
@@ -314,12 +314,12 @@ export class SalaryService {
   }
 
   /**
-   * Import salary records from CSV content (upsert by year/month).
+   * 从 CSV 内容导入工资记录（按 year/month upsert）。
    *
-   * @param {number} userId - Owner id.
-   * @param {string} csvContent - CSV content.
-   * @returns {number} Number of imported rows.
-   * @throws {BusinessError} On empty/malformed content.
+   * @param {number} userId - 所有者 id。
+   * @param {string} csvContent - CSV 内容。
+   * @returns {number} 导入行数。
+   * @throws {BusinessError} 当内容为空或格式错误时。
    */
   importCsv(userId, csvContent) {
     if (csvContent === null || csvContent === undefined || String(csvContent).trim() === '') {
@@ -370,7 +370,7 @@ export class SalaryService {
         remark: cols.length > 25 ? unescapeCsv(cols[25]) : '',
       };
       const columns = this.#applyRequest(request);
-      // Imported files carry the derived columns explicitly; store them as overrides.
+      // 导入文件显式携带派生列；将其作为覆盖值存储。
       columns.grossPay = parseMoneyCell(cols[10]);
       columns.totalDeduction = parseMoneyCell(cols[18]);
       columns.preTaxSalary = parseMoneyCell(cols[19]);
@@ -387,12 +387,12 @@ export class SalaryService {
   }
 
   /**
-   * Run the shared query resolving the (optional) year range.
+   * 运行共享查询并解析（可选）年份范围。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} [startYear] - Optional start year.
-   * @param {number} [endYear] - Optional end year.
-   * @returns {object[]} Matching records.
+   * @param {number} userId - 所有者 id。
+   * @param {number} [startYear] - 可选起始年份。
+   * @param {number} [endYear] - 可选结束年份。
+   * @returns {object[]} 匹配的记录。
    */
   #query(userId, startYear, endYear) {
     const hasStart = startYear !== null && startYear !== undefined;
@@ -412,11 +412,11 @@ export class SalaryService {
   }
 
   /**
-   * Build the export filename for the given year range.
+   * 为给定年份范围构建导出文件名。
    *
-   * @param {number} [startYear] - Optional start year.
-   * @param {number} [endYear] - Optional end year.
-   * @returns {string} Filename.
+   * @param {number} [startYear] - 可选起始年份。
+   * @param {number} [endYear] - 可选结束年份。
+   * @returns {string} 文件名。
    */
   #buildExportFilename(startYear, endYear) {
     if (
@@ -434,20 +434,20 @@ export class SalaryService {
   }
 
   /**
-   * CSV label for a record's month (年终奖 for annual bonus).
+   * 记录月份的 CSV 标签（年终奖表示年度奖金）。
    *
-   * @param {object} record - Salary record.
-   * @returns {string} Month label.
+   * @param {object} record - 工资记录。
+   * @returns {string} 月份标签。
    */
   #monthLabel(record) {
     return salaryCalc.isAnnualBonus(record) ? '年终奖' : String(record.month);
   }
 
   /**
-   * Build the persisted column values from a request (money → cents, derived cleared).
+   * 根据请求构建持久化列值（金钱 → 整数分，清除派生值）。
    *
-   * @param {object} request - Salary request.
-   * @returns {object} Column values (cents; derived fields null).
+   * @param {object} request - 工资请求。
+   * @returns {object} 列值（整数分；派生字段为 null）。
    */
   #applyRequest(request) {
     const toCentsField = (value) => Math.round(Number(value ?? 0) * 100);
@@ -478,10 +478,10 @@ export class SalaryService {
   }
 
   /**
-   * Convert a salary record entity into a response object (cents → numbers).
+   * 将工资记录实体转换为响应对象（整数分 → 数字）。
    *
-   * @param {object} r - Salary record (money in cents).
-   * @returns {object} Salary response.
+   * @param {object} r - 工资记录（金钱以整数分表示）。
+   * @returns {object} 工资响应。
    */
   #toResponse(r) {
     return {

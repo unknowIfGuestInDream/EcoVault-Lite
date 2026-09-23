@@ -1,14 +1,14 @@
 import process from 'node:process';
 
 /**
- * @file Date/time formatting helpers.
+ * @file 日期/时间格式化辅助工具。
  *
- * The original Java service formats timestamps as `yyyy-MM-dd HH:mm:ss` in the
- * GMT+8 timezone. To stay deterministic regardless of the host timezone we
- * apply a fixed offset (configurable through `ECOVAULT_TZ_OFFSET_MINUTES`,
- * defaulting to 480 minutes = GMT+8) and format from the shifted UTC parts.
- * Storing timestamps in this lexicographically-sortable form also keeps range
- * queries correct in SQLite.
+ * 原始 Java 服务以 GMT+8 时区将时间戳格式化为 `yyyy-MM-dd HH:mm:ss`。
+ * 为了不受主机时区影响而保持确定性，我们
+ * 应用固定偏移量（可通过 `ECOVAULT_TZ_OFFSET_MINUTES` 配置，
+ * 默认 480 分钟 = GMT+8），并根据偏移后的 UTC 部分格式化。
+ * 以这种按字典序可排序的形式存储时间戳，也能保持 SQLite 中的范围
+ * 查询正确。
  */
 
 const OFFSET_MINUTES = (() => {
@@ -17,31 +17,31 @@ const OFFSET_MINUTES = (() => {
 })();
 
 /**
- * Left-pad a number with zeros.
+ * 使用零对数字进行左侧填充。
  *
- * @param {number} value - Number to pad.
- * @param {number} [width] - Target width.
- * @returns {string} Zero-padded string.
+ * @param {number} value - 要填充的数字。
+ * @param {number} [width] - 目标宽度。
+ * @returns {string} 零填充后的字符串。
  */
 function pad(value, width = 2) {
   return String(value).padStart(width, '0');
 }
 
 /**
- * Shift a date by the configured timezone offset.
+ * 按配置的时区偏移移动日期。
  *
- * @param {Date} date - Source date.
- * @returns {Date} Date shifted into the configured zone (read via UTC getters).
+ * @param {Date} date - 源日期。
+ * @returns {Date} 移动到配置时区后的日期（通过 UTC getter 读取）。
  */
 function toZoned(date) {
   return new Date(date.getTime() + OFFSET_MINUTES * 60000);
 }
 
 /**
- * Format a date as `yyyy-MM-dd HH:mm:ss` in the configured timezone.
+ * 在配置的时区中将日期格式化为 `yyyy-MM-dd HH:mm:ss`。
  *
- * @param {Date} [date] - Date to format (defaults to now).
- * @returns {string} Formatted timestamp.
+ * @param {Date} [date] - 要格式化的日期（默认为当前时间）。
+ * @returns {string} 格式化后的时间戳。
  */
 export function formatDateTime(date = new Date()) {
   const z = toZoned(date);
@@ -52,10 +52,10 @@ export function formatDateTime(date = new Date()) {
 }
 
 /**
- * Format a date as `yyyy-MM-dd` in the configured timezone.
+ * 在配置的时区中将日期格式化为 `yyyy-MM-dd`。
  *
- * @param {Date} [date] - Date to format (defaults to now).
- * @returns {string} Formatted date.
+ * @param {Date} [date] - 要格式化的日期（默认为当前时间）。
+ * @returns {string} 格式化后的日期。
  */
 export function formatDate(date = new Date()) {
   const z = toZoned(date);
@@ -63,19 +63,19 @@ export function formatDate(date = new Date()) {
 }
 
 /**
- * Current timestamp formatted as `yyyy-MM-dd HH:mm:ss`.
+ * 格式化为 `yyyy-MM-dd HH:mm:ss` 的当前时间戳。
  *
- * @returns {string} Current formatted timestamp.
+ * @returns {string} 当前格式化时间戳。
  */
 export function nowDateTime() {
   return formatDateTime(new Date());
 }
 
 /**
- * Validate a `yyyy-MM-dd` date string.
+ * 校验 `yyyy-MM-dd` 日期字符串。
  *
- * @param {string} value - Candidate date string.
- * @returns {boolean} True when the value is a valid calendar date.
+ * @param {string} value - 候选日期字符串。
+ * @returns {boolean} 值为有效日历日期时返回 true。
  */
 export function isValidDate(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {

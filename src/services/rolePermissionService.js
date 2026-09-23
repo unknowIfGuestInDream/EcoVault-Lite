@@ -8,28 +8,28 @@ import {
 } from '../domain/menuPage.js';
 
 /**
- * @file Role-permission (RBAC) service.
+ * @file 角色权限（RBAC）服务。
  *
- * Reproduces the Java `RolePermissionServiceImpl`: seeding default grants,
- * exposing the role/permission matrix, updating a role's configurable pages,
- * and resolving which pages/paths a user may access.
+ * 复现 Java `RolePermissionServiceImpl`：种子化默认授权、
+ * 暴露角色/权限矩阵、更新角色的可配置页面、
+ * 以及解析用户可访问的页面/路径。
  */
 
 /**
- * Role-permission service.
+ * 角色权限服务。
  */
 export class RolePermissionService {
   /**
-   * @param {object} deps - Dependencies.
-   * @param {object} deps.repository - RBAC repo.
+   * @param {object} deps - 依赖项。
+   * @param {object} deps.repository - RBAC 仓储。
    */
   constructor({ repository }) {
     this.repository = repository;
   }
 
   /**
-   * Seed default permissions: every role is granted all configurable pages
-   * unless it already has grants.
+   * 种子化默认权限：每个角色都会被授予所有可配置页面
+   * 除非它已经有授权。
    *
    * @returns {void}
    */
@@ -44,9 +44,9 @@ export class RolePermissionService {
   }
 
   /**
-   * Build the role/permission matrix (configurable pages × roles).
+   * 构建角色/权限矩阵（可配置页面 × 角色）。
    *
-   * @returns {{ pages: Array<{key: string, label: string, group: string}>, roles: Array<{role: string, allowedPages: string[]}> }} Matrix.
+   * @returns {{ pages: Array<{key: string, label: string, group: string}>, roles: Array<{role: string, allowedPages: string[]}> }} 矩阵。
    */
   getMatrix() {
     const pages = configurablePages().map((page) => ({
@@ -62,12 +62,12 @@ export class RolePermissionService {
   }
 
   /**
-   * Replace the configurable pages granted to a role.
+   * 替换授予角色的可配置页面。
    *
-   * @param {string} role - Target role.
-   * @param {string[]} pageKeys - Requested page keys.
+   * @param {string} role - 目标角色。
+   * @param {string[]} pageKeys - 请求的页面键。
    * @returns {void}
-   * @throws {BusinessError} When targeting ADMIN or an illegal page key is supplied.
+   * @throws {BusinessError} 当目标为 ADMIN 或提供了非法页面键时。
    */
   updatePermissions(role, pageKeys) {
     if (role === Role.ADMIN) {
@@ -95,13 +95,13 @@ export class RolePermissionService {
   }
 
   /**
-   * Resolve the set of page keys a user may access.
+   * 解析用户可访问的页面键集合。
    *
-   * Always includes the non-admin, non-configurable pages (dashboard/profile).
-   * ADMIN receives every page; other users receive their configurable grants.
+   * 始终包含非管理员、不可配置页面（dashboard/profile）。
+   * ADMIN 获得所有页面；其他用户获得其可配置授权。
    *
-   * @param {{ role: string } | null} user - Current user.
-   * @returns {string[]} Accessible page keys (insertion-ordered, de-duplicated).
+   * @param {{ role: string } | null} user - 当前用户。
+   * @returns {string[]} 可访问的页面键（按插入顺序，已去重）。
    */
   accessiblePageKeys(user) {
     const keys = [];
@@ -132,11 +132,11 @@ export class RolePermissionService {
   }
 
   /**
-   * Whether a user may access the page mapped to a given route path.
+   * 用户是否可访问映射到给定路由路径的页面。
    *
-   * @param {{ role: string } | null} user - Current user.
-   * @param {string} path - Route path.
-   * @returns {boolean} True when access is allowed.
+   * @param {{ role: string } | null} user - 当前用户。
+   * @param {string} path - 路由路径。
+   * @returns {boolean} 访问被允许时为 true。
    */
   canAccessPath(user, path) {
     const page = getMenuPageByPath(path);
@@ -157,10 +157,10 @@ export class RolePermissionService {
   }
 
   /**
-   * The configurable page keys currently granted to a role.
+   * 当前授予角色的可配置页面键。
    *
-   * @param {string} role - Role name.
-   * @returns {string[]} Granted configurable keys (de-duplicated, insertion order).
+   * @param {string} role - 角色名称。
+   * @returns {string[]} 已授权的可配置键（已去重，插入顺序）。
    */
   #allowedConfigurableKeys(role) {
     const configurableKeys = new Set(CONFIGURABLE_PAGE_KEYS);

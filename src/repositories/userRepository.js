@@ -1,14 +1,14 @@
 import { nowDateTime } from '../utils/datetime.js';
 
 /**
- * @file User data-access repository.
+ * @file 用户数据访问仓储。
  */
 
 /**
- * Map a raw database row to a user entity.
+ * 将原始数据库行映射为用户实体。
  *
- * @param {object | undefined} row - Raw row.
- * @returns {object | null} User entity (with `enabled` as boolean) or null.
+ * @param {object | undefined} row - 原始行。
+ * @returns {object | null} 用户实体（`enabled` 为布尔值）或 null。
  */
 function mapUser(row) {
   if (!row) {
@@ -28,11 +28,11 @@ function mapUser(row) {
 }
 
 /**
- * Repository for the `users` table.
+ * `users` 表的仓储。
  */
 export class UserRepository {
   /**
-   * @param {object} db - Database handle.
+   * @param {object} db - 数据库句柄。
    */
   constructor(db) {
     /** @type {object} */
@@ -40,30 +40,30 @@ export class UserRepository {
   }
 
   /**
-   * Find a user by id.
+   * 按 id 查找用户。
    *
-   * @param {number} id - User id.
-   * @returns {object | null} User entity or null.
+   * @param {number} id - 用户 id。
+   * @returns {object | null} 用户实体或 null。
    */
   findById(id) {
     return mapUser(this.db.prepare('SELECT * FROM users WHERE id = ?').get(id));
   }
 
   /**
-   * Find a user by username.
+   * 按用户名查找用户。
    *
-   * @param {string} username - Username.
-   * @returns {object | null} User entity or null.
+   * @param {string} username - 用户名。
+   * @returns {object | null} 用户实体或 null。
    */
   findByUsername(username) {
     return mapUser(this.db.prepare('SELECT * FROM users WHERE username = ?').get(username));
   }
 
   /**
-   * Check whether a username already exists.
+   * 检查用户名是否已存在。
    *
-   * @param {string} username - Username.
-   * @returns {boolean} True when a matching user exists.
+   * @param {string} username - 用户名。
+   * @returns {boolean} 存在匹配用户时为 true。
    */
   existsByUsername(username) {
     const row = this.db.prepare('SELECT 1 FROM users WHERE username = ? LIMIT 1').get(username);
@@ -71,28 +71,28 @@ export class UserRepository {
   }
 
   /**
-   * List all users ordered by id ascending.
+   * 列出所有用户，按 id 升序排序。
    *
-   * @returns {object[]} User entities.
+   * @returns {object[]} 用户实体。
    */
   findAll() {
     return this.db.prepare('SELECT * FROM users ORDER BY id ASC').all().map(mapUser);
   }
 
   /**
-   * Count all users.
+   * 统计所有用户。
    *
-   * @returns {number} Number of users.
+   * @returns {number} 用户数量。
    */
   count() {
     return this.db.prepare('SELECT COUNT(*) AS c FROM users').get().c;
   }
 
   /**
-   * Insert a new user.
+   * 插入新用户。
    *
-   * @param {object} user - User fields (username, password, nickname, email, role, enabled).
-   * @returns {object} The inserted user entity.
+   * @param {object} user - 用户字段（username、password、nickname、email、role、enabled）。
+   * @returns {object} 已插入的用户实体。
    */
   insert(user) {
     const now = nowDateTime();
@@ -115,11 +115,11 @@ export class UserRepository {
   }
 
   /**
-   * Update mutable fields of a user.
+   * 更新用户的可变字段。
    *
-   * @param {number} id - User id.
-   * @param {object} fields - Fields to update (nickname, email, role, enabled, password).
-   * @returns {object | null} Updated user entity.
+   * @param {number} id - 用户 id。
+   * @param {object} fields - 要更新的字段（nickname、email、role、enabled、password）。
+   * @returns {object | null} 已更新的用户实体。
    */
   update(id, fields) {
     const current = this.findById(id);
@@ -145,10 +145,10 @@ export class UserRepository {
   }
 
   /**
-   * Delete a user by id.
+   * 按 id 删除用户。
    *
-   * @param {number} id - User id.
-   * @returns {boolean} True when a row was deleted.
+   * @param {number} id - 用户 id。
+   * @returns {boolean} 删除了一行时为 true。
    */
   deleteById(id) {
     return this.db.prepare('DELETE FROM users WHERE id = ?').run(id).changes > 0;

@@ -3,23 +3,23 @@ import { Role } from '../domain/role.js';
 import { hashPassword } from '../security/passwordHash.js';
 
 /**
- * @file Administrative user-management service.
+ * @file 管理员用户管理服务。
  *
- * Reproduces the Java `AdminServiceImpl`: listing users, enabling/disabling
- * (with a guard against disabling the current account), updating and deleting
- * users. Whenever an account is disabled, has its password changed, or is
- * deleted, all of its active sessions are revoked.
+ * 复现 Java `AdminServiceImpl`：列出用户、启用/禁用
+ * （包含防止禁用当前账号的保护）、更新和删除
+ * 用户。每当账号被禁用、密码被修改，或
+ * 被删除时，其所有活跃会话都会被吊销。
  *
- * The Java implementation resolved the "current user" from a thread-local; here
- * the caller passes `currentUserId` explicitly.
+ * Java 实现从线程局部变量解析“当前用户”；此处
+ * 调用方显式传入 `currentUserId`。
  */
 
 /**
- * Parse and validate a role string (no default; must be valid).
+ * 解析并校验角色字符串（无默认值；必须有效）。
  *
- * @param {string} role - Raw role.
- * @returns {string} A valid role.
- * @throws {BusinessError} When the role is invalid.
+ * @param {string} role - 原始角色。
+ * @returns {string} 有效角色。
+ * @throws {BusinessError} 当角色无效时。
  */
 function parseRole(role) {
   const normalized = String(role).trim().toUpperCase();
@@ -30,13 +30,13 @@ function parseRole(role) {
 }
 
 /**
- * Admin service.
+ * 管理服务。
  */
 export class AdminService {
   /**
-   * @param {object} deps - Dependencies.
-   * @param {object} deps.userRepository - User repo.
-   * @param {object} deps.sessionRepository - Session repo.
+   * @param {object} deps - 依赖项。
+   * @param {object} deps.userRepository - 用户仓储。
+   * @param {object} deps.sessionRepository - 会话仓储。
    */
   constructor({ userRepository, sessionRepository }) {
     this.userRepository = userRepository;
@@ -44,22 +44,22 @@ export class AdminService {
   }
 
   /**
-   * List all users.
+   * 列出所有用户。
    *
-   * @returns {object[]} Admin user responses.
+   * @returns {object[]} 管理员用户响应。
    */
   listUsers() {
     return this.userRepository.findAll().map((user) => this.#toResponse(user));
   }
 
   /**
-   * Enable or disable a user.
+   * 启用或禁用用户。
    *
-   * @param {number} userId - Target user id.
-   * @param {boolean} enabled - Desired state.
-   * @param {number} currentUserId - Id of the acting admin.
+   * @param {number} userId - 目标用户 id。
+   * @param {boolean} enabled - 期望状态。
+   * @param {number} currentUserId - 执行操作的管理员 id。
    * @returns {void}
-   * @throws {BusinessError} When the user does not exist or an admin disables themselves.
+   * @throws {BusinessError} 当用户不存在或管理员禁用自己时。
    */
   setUserEnabled(userId, enabled, currentUserId) {
     const user = this.userRepository.findById(userId);
@@ -76,13 +76,13 @@ export class AdminService {
   }
 
   /**
-   * Update a user's attributes.
+   * 更新用户属性。
    *
-   * @param {number} userId - Target user id.
-   * @param {object} request - Update request.
-   * @param {number} currentUserId - Id of the acting admin.
-   * @returns {object} Updated admin user response.
-   * @throws {BusinessError} When the user does not exist or an admin disables themselves.
+   * @param {number} userId - 目标用户 id。
+   * @param {object} request - 更新请求。
+   * @param {number} currentUserId - 执行操作的管理员 id。
+   * @returns {object} 更新后的管理员用户响应。
+   * @throws {BusinessError} 当用户不存在或管理员禁用自己时。
    */
   updateUser(userId, request, currentUserId) {
     const user = this.userRepository.findById(userId);
@@ -129,11 +129,11 @@ export class AdminService {
   }
 
   /**
-   * Delete a user and revoke their sessions.
+   * 删除用户并吊销其会话。
    *
-   * @param {number} userId - Target user id.
+   * @param {number} userId - 目标用户 id。
    * @returns {void}
-   * @throws {BusinessError} When the user does not exist.
+   * @throws {BusinessError} 当用户不存在时。
    */
   deleteUser(userId) {
     const user = this.userRepository.findById(userId);
@@ -145,9 +145,9 @@ export class AdminService {
   }
 
   /**
-   * Revoke all active sessions of a user.
+   * 吊销用户的所有活跃会话。
    *
-   * @param {number} userId - User id.
+   * @param {number} userId - 用户 id。
    * @returns {void}
    */
   #revokeSessions(userId) {
@@ -155,10 +155,10 @@ export class AdminService {
   }
 
   /**
-   * Map a user entity to an admin response.
+   * 将用户实体映射为管理员响应。
    *
-   * @param {object} user - User entity.
-   * @returns {object} Admin user response.
+   * @param {object} user - 用户实体。
+   * @returns {object} 管理员用户响应。
    */
   #toResponse(user) {
     return {

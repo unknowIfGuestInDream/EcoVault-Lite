@@ -5,21 +5,21 @@ import Database from 'better-sqlite3';
 import config from '../config/index.js';
 
 /**
- * @file SQLite database bootstrap.
+ * @file SQLite 数据库引导。
  *
- * Opens (or creates) the better-sqlite3 database, applies pragmatic pragmas for
- * a lightweight single-writer workload, and executes the schema. A single
- * shared connection is exported because better-sqlite3 is synchronous and
- * SQLite only supports one writer at a time.
+ * 打开（或创建）better-sqlite3 数据库，为
+ * 轻量级单写入者负载应用实用的 pragma，并执行 schema。单个
+ * 共享连接被导出，因为 better-sqlite3 是同步的，且
+ * SQLite 同一时间只支持一个写入者。
  */
 
 const moduleDir = path.dirname(fileURLToPath(import.meta.url));
 const SCHEMA_PATH = path.join(moduleDir, 'schema.sql');
 
 /**
- * Ensure the parent directory for a file-based database exists.
+ * 确保基于文件的数据库的父目录存在。
  *
- * @param {string} dbPath - Configured database path.
+ * @param {string} dbPath - 已配置的数据库路径。
  * @returns {void}
  */
 function ensureDbDir(dbPath) {
@@ -33,10 +33,10 @@ function ensureDbDir(dbPath) {
 }
 
 /**
- * Create and initialise a database connection.
+ * 创建并初始化数据库连接。
  *
- * @param {string} [dbPath] - Optional database path override (used by tests).
- * @returns {object} An initialised database handle.
+ * @param {string} [dbPath] - 可选的数据库路径覆盖值（供测试使用）。
+ * @returns {object} 已初始化的数据库句柄。
  */
 export function createDatabase(dbPath = config.db.path) {
   ensureDbDir(dbPath);
@@ -50,7 +50,7 @@ export function createDatabase(dbPath = config.db.path) {
 }
 
 /**
- * The shared application database connection.
+ * 共享的应用数据库连接。
  *
  * @type {object}
  */

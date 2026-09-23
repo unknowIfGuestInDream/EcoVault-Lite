@@ -1,29 +1,29 @@
 /**
- * @file Salary derived-field calculations.
+ * @file 工资派生字段计算。
  *
- * Mirrors the getter logic on the Java `SalaryRecord` entity. All values are in
- * integer cents. Each derived field returns its stored override when present
- * (non-null), otherwise it is computed on the fly from the component fields.
+ * 对齐 Java `SalaryRecord` 实体上的 getter 逻辑。所有值均以
+ * 整数分表示。每个派生字段在存在存储的覆盖值时返回该值
+ * （非 null），否则根据组成字段即时计算。
  */
 
-/** Month value that marks an annual-bonus record. */
+/** 标记年终奖记录的月份值。 */
 export const ANNUAL_BONUS_MONTH = 0;
 
 /**
- * Whether a record represents the annual bonus (month === 0).
+ * 判断记录是否表示年终奖（month === 0）。
  *
- * @param {{ month: number }} record - Salary record.
- * @returns {boolean} True when the record is the annual bonus.
+ * @param {{ month: number }} record - 工资记录。
+ * @returns {boolean} 记录为年终奖时返回 true。
  */
 export function isAnnualBonus(record) {
   return record.month === ANNUAL_BONUS_MONTH;
 }
 
 /**
- * Compute gross pay (sum of all earning components) in cents.
+ * 计算应发工资（所有收入组成部分之和），单位为分。
  *
- * @param {object} r - Salary record (money in cents).
- * @returns {number} Gross pay in cents.
+ * @param {object} r - 工资记录（金额以分表示）。
+ * @returns {number} 以分表示的应发工资。
  */
 export function grossPay(r) {
   if (r.grossPay !== null && r.grossPay !== undefined) {
@@ -42,10 +42,10 @@ export function grossPay(r) {
 }
 
 /**
- * Compute the total statutory deduction in cents.
+ * 计算法定扣款总额，单位为分。
  *
- * @param {object} r - Salary record (money in cents).
- * @returns {number} Total deduction in cents.
+ * @param {object} r - 工资记录（金额以分表示）。
+ * @returns {number} 以分表示的扣款总额。
  */
 export function totalDeduction(r) {
   if (r.totalDeduction !== null && r.totalDeduction !== undefined) {
@@ -60,10 +60,10 @@ export function totalDeduction(r) {
 }
 
 /**
- * Compute pre-tax salary (gross - total deduction) in cents.
+ * 计算税前工资（应发 - 扣款总额），单位为分。
  *
- * @param {object} r - Salary record (money in cents).
- * @returns {number} Pre-tax salary in cents.
+ * @param {object} r - 工资记录（金额以分表示）。
+ * @returns {number} 以分表示的税前工资。
  */
 export function preTaxSalary(r) {
   if (r.preTaxSalary !== null && r.preTaxSalary !== undefined) {
@@ -73,10 +73,10 @@ export function preTaxSalary(r) {
 }
 
 /**
- * Compute after-tax salary (pre-tax - income tax) in cents.
+ * 计算税后工资（税前 - 个税），单位为分。
  *
- * @param {object} r - Salary record (money in cents).
- * @returns {number} After-tax salary in cents.
+ * @param {object} r - 工资记录（金额以分表示）。
+ * @returns {number} 以分表示的税后工资。
  */
 export function afterTaxSalary(r) {
   if (r.afterTaxSalary !== null && r.afterTaxSalary !== undefined) {
@@ -86,10 +86,10 @@ export function afterTaxSalary(r) {
 }
 
 /**
- * Net pay (null-safe) in cents.
+ * 实发工资（null 安全），单位为分。
  *
- * @param {object} r - Salary record (money in cents).
- * @returns {number} Net pay in cents.
+ * @param {object} r - 工资记录（金额以分表示）。
+ * @returns {number} 以分表示的实发工资。
  */
 export function netPay(r) {
   return r.netPay ?? 0;

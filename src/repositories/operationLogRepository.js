@@ -1,14 +1,14 @@
 import { nowDateTime } from '../utils/datetime.js';
 
 /**
- * @file Operation/audit log repository.
+ * @file 操作/审计日志仓储。
  */
 
 /**
- * Map a raw row to an operation-log entity.
+ * 将原始行映射为操作日志实体。
  *
- * @param {object | undefined} row - Raw row.
- * @returns {object | null} Entity or null.
+ * @param {object | undefined} row - 原始行。
+ * @returns {object | null} 实体或 null。
  */
 function mapLog(row) {
   if (!row) {
@@ -31,11 +31,11 @@ function mapLog(row) {
 }
 
 /**
- * Repository for the `operation_logs` table.
+ * `operation_logs` 表的仓储。
  */
 export class OperationLogRepository {
   /**
-   * @param {object} db - Database handle.
+   * @param {object} db - 数据库句柄。
    */
   constructor(db) {
     /** @type {object} */
@@ -43,10 +43,10 @@ export class OperationLogRepository {
   }
 
   /**
-   * Insert a log record.
+   * 插入日志记录。
    *
-   * @param {object} log - Log fields.
-   * @returns {number} The inserted row id.
+   * @param {object} log - 日志字段。
+   * @returns {number} 已插入行的 id。
    */
   insert(log) {
     const info = this.db
@@ -72,20 +72,20 @@ export class OperationLogRepository {
   }
 
   /**
-   * Find a single log by id.
+   * 按 id 查找单条日志。
    *
-   * @param {number} id - Log id.
-   * @returns {object | null} Entity or null.
+   * @param {number} id - 日志 id。
+   * @returns {object | null} 实体或 null。
    */
   findById(id) {
     return mapLog(this.db.prepare('SELECT * FROM operation_logs WHERE id = ?').get(id));
   }
 
   /**
-   * Build the shared WHERE clause and arguments for the search filters.
+   * 为搜索过滤条件构建共享 WHERE 子句和参数。
    *
-   * @param {object} filters - Search filters.
-   * @returns {{ where: string, args: object }} Clause and bound args.
+   * @param {object} filters - 搜索过滤条件。
+   * @returns {{ where: string, args: object }} 子句与绑定参数。
    */
   #buildWhere({ userId, module, keyword, start, end }) {
     const clauses = [];
@@ -115,10 +115,10 @@ export class OperationLogRepository {
   }
 
   /**
-   * Paginated search ordered by creation time descending.
+   * 分页搜索，按创建时间降序排序。
    *
-   * @param {object} filters - Filters plus `page` (0-based) and `size`.
-   * @returns {{ content: object[], totalElements: number }} Page slice and total.
+   * @param {object} filters - 过滤条件以及 `page`（从 0 开始）和 `size`。
+   * @returns {{ content: object[], totalElements: number }} 分页切片与总数。
    */
   search(filters) {
     const { where, args } = this.#buildWhere(filters);
@@ -134,11 +134,11 @@ export class OperationLogRepository {
   }
 
   /**
-   * Update the editable fields of a log (module, operation).
+   * 更新日志的可编辑字段（module、operation）。
    *
-   * @param {number} id - Log id.
-   * @param {object} fields - Fields to update.
-   * @returns {object | null} Updated entity.
+   * @param {number} id - 日志 id。
+   * @param {object} fields - 要更新的字段。
+   * @returns {object | null} 已更新的实体。
    */
   update(id, fields) {
     const current = this.findById(id);
@@ -156,10 +156,10 @@ export class OperationLogRepository {
   }
 
   /**
-   * Delete a log by id.
+   * 按 id 删除日志。
    *
-   * @param {number} id - Log id.
-   * @returns {boolean} True when a row was deleted.
+   * @param {number} id - 日志 id。
+   * @returns {boolean} 删除了一行时为 true。
    */
   deleteById(id) {
     return this.db.prepare('DELETE FROM operation_logs WHERE id = ?').run(id).changes > 0;

@@ -3,22 +3,22 @@ import { LedgerType } from '../domain/ledgerType.js';
 import { fromCents, formatCents } from '../utils/money.js';
 
 /**
- * @file Ledger (income/expense) service.
+ * @file 账本（收入/支出）服务。
  *
- * Reproduces the Java `LedgerServiceImpl`: CRUD, filtered queries, aggregate
- * statistics (totals, per-tag breakdown preserving first-seen order, monthly
- * trend sorted ascending) and BOM-prefixed CSV export.
+ * 复现 Java `LedgerServiceImpl`：CRUD、筛选查询、聚合
+ * 统计（总额、保留首次出现顺序的按标签明细、月度
+ * 趋势升序排序）以及带 BOM 前缀的 CSV 导出。
  */
 
-/** The bucket label used for entries that carry no tags. */
+/** 用于无标签条目的分桶标签。 */
 const UNCATEGORISED = '未分类';
 
 /**
- * Parse an optional ledger type string.
+ * 解析可选的账本类型字符串。
  *
- * @param {string | null | undefined} type - Raw type.
- * @returns {string | null} A valid {@link LedgerType} or null when blank.
- * @throws {BusinessError} When the value is non-blank but invalid.
+ * @param {string | null | undefined} type - 原始类型。
+ * @returns {string | null} 有效的 {@link LedgerType}，为空时返回 null。
+ * @throws {BusinessError} 当值非空但无效时。
  */
 function parseType(type) {
   if (type === null || type === undefined || String(type).trim() === '') {
@@ -32,11 +32,11 @@ function parseType(type) {
 }
 
 /**
- * Parse a required ledger type string.
+ * 解析必填的账本类型字符串。
  *
- * @param {string | null | undefined} type - Raw type.
- * @returns {string} A valid {@link LedgerType}.
- * @throws {BusinessError} When the value is blank or invalid.
+ * @param {string | null | undefined} type - 原始类型。
+ * @returns {string} 有效的 {@link LedgerType}。
+ * @throws {BusinessError} 当值为空或无效时。
  */
 function parseRequiredType(type) {
   const parsed = parseType(type);
@@ -47,10 +47,10 @@ function parseRequiredType(type) {
 }
 
 /**
- * Normalise a tag list: trim, drop blanks, de-duplicate preserving order.
+ * 规范化标签列表：去除首尾空白、丢弃空值、保序去重。
  *
- * @param {string[] | null | undefined} tags - Raw tags.
- * @returns {string[]} Normalised tags.
+ * @param {string[] | null | undefined} tags - 原始标签。
+ * @returns {string[]} 规范化后的标签。
  */
 function normalizeTags(tags) {
   const result = [];
@@ -70,10 +70,10 @@ function normalizeTags(tags) {
 }
 
 /**
- * Escape a value for CSV output.
+ * 转义用于 CSV 输出的值。
  *
- * @param {string | null | undefined} value - Raw value.
- * @returns {string} Escaped value.
+ * @param {string | null | undefined} value - 原始值。
+ * @returns {string} 转义后的值。
  */
 function escapeCsv(value) {
   if (value === null || value === undefined || value === '') {
@@ -87,23 +87,23 @@ function escapeCsv(value) {
 }
 
 /**
- * Ledger service.
+ * 账本服务。
  */
 export class LedgerService {
   /**
-   * @param {object} deps - Dependencies.
-   * @param {object} deps.repository - Ledger repo.
+   * @param {object} deps - 依赖项。
+   * @param {object} deps.repository - 账本仓储。
    */
   constructor({ repository }) {
     this.repository = repository;
   }
 
   /**
-   * Create a ledger entry.
+   * 创建账本条目。
    *
-   * @param {number} userId - Owner id.
-   * @param {object} request - Ledger request.
-   * @returns {object} Ledger response.
+   * @param {number} userId - 所有者 id。
+   * @param {object} request - 账本请求。
+   * @returns {object} 账本响应。
    */
   create(userId, request) {
     const entry = this.repository.insert({ userId, ...this.#applyRequest(request) });
@@ -111,13 +111,13 @@ export class LedgerService {
   }
 
   /**
-   * Update a ledger entry.
+   * 更新账本条目。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} id - Entry id.
-   * @param {object} request - Ledger request.
-   * @returns {object} Ledger response.
-   * @throws {BusinessError} When the entry does not exist.
+   * @param {number} userId - 所有者 id。
+   * @param {number} id - 条目 id。
+   * @param {object} request - 账本请求。
+   * @returns {object} 账本响应。
+   * @throws {BusinessError} 当条目不存在时。
    */
   update(userId, id, request) {
     const existing = this.repository.findByIdAndUser(id, userId);
@@ -129,12 +129,12 @@ export class LedgerService {
   }
 
   /**
-   * Delete a ledger entry.
+   * 删除账本条目。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} id - Entry id.
+   * @param {number} userId - 所有者 id。
+   * @param {number} id - 条目 id。
    * @returns {void}
-   * @throws {BusinessError} When the entry does not exist.
+   * @throws {BusinessError} 当条目不存在时。
    */
   delete(userId, id) {
     const existing = this.repository.findByIdAndUser(id, userId);
@@ -145,28 +145,28 @@ export class LedgerService {
   }
 
   /**
-   * List ledger entries matching the given filters.
+   * 列出匹配给定筛选条件的账本条目。
    *
-   * @param {number} userId - Owner id.
-   * @param {string} [type] - Optional type filter.
-   * @param {string} [start] - Optional start date (yyyy-MM-dd).
-   * @param {string} [end] - Optional end date (yyyy-MM-dd).
-   * @param {string} [tag] - Optional tag filter.
-   * @returns {object[]} Ledger responses.
+   * @param {number} userId - 所有者 id。
+   * @param {string} [type] - 可选类型筛选。
+   * @param {string} [start] - 可选起始日期（yyyy-MM-dd）。
+   * @param {string} [end] - 可选结束日期（yyyy-MM-dd）。
+   * @param {string} [tag] - 可选标签筛选。
+   * @returns {object[]} 账本响应。
    */
   list(userId, type, start, end, tag) {
     return this.#query(userId, type, start, end, tag).map((entry) => this.#toResponse(entry));
   }
 
   /**
-   * Compute aggregate statistics for the matching entries.
+   * 计算匹配条目的聚合统计。
    *
-   * @param {number} userId - Owner id.
-   * @param {string} [type] - Optional type filter.
-   * @param {string} [start] - Optional start date.
-   * @param {string} [end] - Optional end date.
-   * @param {string} [tag] - Optional tag filter.
-   * @returns {object} Ledger statistics.
+   * @param {number} userId - 所有者 id。
+   * @param {string} [type] - 可选类型筛选。
+   * @param {string} [start] - 可选起始日期。
+   * @param {string} [end] - 可选结束日期。
+   * @param {string} [tag] - 可选标签筛选。
+   * @returns {object} 账本统计。
    */
   statistics(userId, type, start, end, tag) {
     const entries = this.#query(userId, type, start, end, tag);
@@ -209,14 +209,14 @@ export class LedgerService {
   }
 
   /**
-   * Export the matching entries as CSV (UTF-8 BOM prefixed).
+   * 将匹配条目导出为 CSV（带 UTF-8 BOM 前缀）。
    *
-   * @param {number} userId - Owner id.
-   * @param {string} [type] - Optional type filter.
-   * @param {string} [start] - Optional start date.
-   * @param {string} [end] - Optional end date.
-   * @param {string} [tag] - Optional tag filter.
-   * @returns {string} CSV content.
+   * @param {number} userId - 所有者 id。
+   * @param {string} [type] - 可选类型筛选。
+   * @param {string} [start] - 可选起始日期。
+   * @param {string} [end] - 可选结束日期。
+   * @param {string} [tag] - 可选标签筛选。
+   * @returns {string} CSV 内容。
    */
   exportCsv(userId, type, start, end, tag) {
     const entries = this.#query(userId, type, start, end, tag);
@@ -233,15 +233,15 @@ export class LedgerService {
   }
 
   /**
-   * Run the shared query with validation.
+   * 运行带校验的共享查询。
    *
-   * @param {number} userId - Owner id.
-   * @param {string} [type] - Optional type filter.
-   * @param {string} [start] - Optional start date.
-   * @param {string} [end] - Optional end date.
-   * @param {string} [tag] - Optional tag filter.
-   * @returns {object[]} Matching entries.
-   * @throws {BusinessError} When start is after end.
+   * @param {number} userId - 所有者 id。
+   * @param {string} [type] - 可选类型筛选。
+   * @param {string} [start] - 可选起始日期。
+   * @param {string} [end] - 可选结束日期。
+   * @param {string} [tag] - 可选标签筛选。
+   * @returns {object[]} 匹配的条目。
+   * @throws {BusinessError} 当起始日期晚于结束日期时。
    */
   #query(userId, type, start, end, tag) {
     const ledgerType = parseType(type);
@@ -262,10 +262,10 @@ export class LedgerService {
   }
 
   /**
-   * Build the persisted column values from a request.
+   * 根据请求构建持久化列值。
    *
-   * @param {object} request - Ledger request.
-   * @returns {object} Column values.
+   * @param {object} request - 账本请求。
+   * @returns {object} 列值。
    */
   #applyRequest(request) {
     return {
@@ -278,11 +278,11 @@ export class LedgerService {
   }
 
   /**
-   * Accumulate an amount into the per-tag map (bucketing untagged as 未分类).
+   * 将金额累加到按标签 map（未标记项归入未分类）。
    *
-   * @param {Map<string, number>} target - Target map (cents).
-   * @param {string[]} tags - Entry tags.
-   * @param {number} amount - Amount in cents.
+   * @param {Map<string, number>} target - 目标 map（整数分）。
+   * @param {string[]} tags - 条目标签。
+   * @param {number} amount - 以整数分表示的金额。
    * @returns {void}
    */
   #accumulateTags(target, tags, amount) {
@@ -296,20 +296,20 @@ export class LedgerService {
   }
 
   /**
-   * Convert a per-tag cents map into a list of {tag, amount} objects.
+   * 将按标签的整数分 map 转换为 {tag, amount} 对象列表。
    *
-   * @param {Map<string, number>} map - Per-tag map (cents).
-   * @returns {Array<{ tag: string, amount: number }>} Tag amounts.
+   * @param {Map<string, number>} map - 按标签 map（整数分）。
+   * @returns {Array<{ tag: string, amount: number }>} 标签金额。
    */
   #toTagAmounts(map) {
     return [...map.entries()].map(([tag, amount]) => ({ tag, amount: fromCents(amount) }));
   }
 
   /**
-   * Convert an entry entity into a response object.
+   * 将条目实体转换为响应对象。
    *
-   * @param {object} entry - Entry entity (amount in cents).
-   * @returns {object} Ledger response.
+   * @param {object} entry - 条目实体（金额以整数分表示）。
+   * @returns {object} 账本响应。
    */
   #toResponse(entry) {
     return {

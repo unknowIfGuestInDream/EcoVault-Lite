@@ -1,14 +1,14 @@
 import { nowDateTime } from '../utils/datetime.js';
 
 /**
- * @file Salary record repository.
+ * @file 工资记录仓储。
  *
- * Money columns are stored and returned as integer cents. The four derived
- * columns (`gross_pay`, `total_deduction`, `pre_tax_salary`, `after_tax_salary`)
- * are nullable: a null value means "recompute from components on demand".
+ * 金额列以整数分存储并返回。四个派生
+ * 列（`gross_pay`、`total_deduction`、`pre_tax_salary`、`after_tax_salary`）
+ * 可为 null：null 值表示“按需根据组成项重新计算”。
  */
 
-/** Non-nullable money component columns (DB snake_case -> entity camelCase). */
+/** 不可为 null 的金额组成列（DB snake_case -> 实体 camelCase）。 */
 const MONEY_COLUMNS = Object.freeze({
   base_salary: 'baseSalary',
   performance_salary: 'performanceSalary',
@@ -31,7 +31,7 @@ const MONEY_COLUMNS = Object.freeze({
   net_pay: 'netPay',
 });
 
-/** Nullable derived money columns. */
+/** 可为 null 的派生金额列。 */
 const DERIVED_COLUMNS = Object.freeze({
   gross_pay: 'grossPay',
   total_deduction: 'totalDeduction',
@@ -40,10 +40,10 @@ const DERIVED_COLUMNS = Object.freeze({
 });
 
 /**
- * Map a raw row to a salary entity (money fields as cents).
+ * 将原始行映射为工资实体（金额字段以分为单位）。
  *
- * @param {object | undefined} row - Raw row.
- * @returns {object | null} Entity or null.
+ * @param {object | undefined} row - 原始行。
+ * @returns {object | null} 实体或 null。
  */
 function mapSalary(row) {
   if (!row) {
@@ -68,10 +68,10 @@ function mapSalary(row) {
 }
 
 /**
- * Build the full column parameter map for insert/update.
+ * 为插入/更新构建完整的列参数映射。
  *
- * @param {object} entity - Salary entity (money as cents).
- * @returns {object} Column -> value parameter object.
+ * @param {object} entity - 工资实体（金额以分为单位）。
+ * @returns {object} 列 -> 值的参数对象。
  */
 function toParams(entity) {
   const params = {
@@ -93,11 +93,11 @@ function toParams(entity) {
 const ALL_MONEY_COLUMNS = [...Object.keys(MONEY_COLUMNS), ...Object.keys(DERIVED_COLUMNS)];
 
 /**
- * Repository for the `salary_records` table.
+ * `salary_records` 表的仓储。
  */
 export class SalaryRecordRepository {
   /**
-   * @param {object} db - Database handle.
+   * @param {object} db - 数据库句柄。
    */
   constructor(db) {
     /** @type {object} */
@@ -105,10 +105,10 @@ export class SalaryRecordRepository {
   }
 
   /**
-   * List all of a user's records ordered by year then month ascending.
+   * 列出用户的所有记录，按年份再按月份升序排序。
    *
-   * @param {number} userId - Owner id.
-   * @returns {object[]} Entities.
+   * @param {number} userId - 所有者 id。
+   * @returns {object[]} 实体。
    */
   findByUser(userId) {
     return this.db
@@ -118,11 +118,11 @@ export class SalaryRecordRepository {
   }
 
   /**
-   * List a user's records for a single year.
+   * 列出用户单个年份的记录。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} year - Year.
-   * @returns {object[]} Entities ordered by month ascending.
+   * @param {number} userId - 所有者 id。
+   * @param {number} year - 年份。
+   * @returns {object[]} 按月份升序排序的实体。
    */
   findByUserAndYear(userId, year) {
     return this.db
@@ -132,12 +132,12 @@ export class SalaryRecordRepository {
   }
 
   /**
-   * List a user's records between two years (inclusive).
+   * 列出用户两个年份之间的记录（含边界）。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} startYear - Start year (inclusive).
-   * @param {number} endYear - End year (inclusive).
-   * @returns {object[]} Entities ordered by year then month ascending.
+   * @param {number} userId - 所有者 id。
+   * @param {number} startYear - 起始年份（含）。
+   * @param {number} endYear - 结束年份（含）。
+   * @returns {object[]} 按年份再按月份升序排序的实体。
    */
   findByUserAndYearBetween(userId, startYear, endYear) {
     return this.db
@@ -150,11 +150,11 @@ export class SalaryRecordRepository {
   }
 
   /**
-   * Find one record scoped to its owner.
+   * 查找归属指定所有者的单条记录。
    *
-   * @param {number} id - Record id.
-   * @param {number} userId - Owner id.
-   * @returns {object | null} Entity or null.
+   * @param {number} id - 记录 id。
+   * @param {number} userId - 所有者 id。
+   * @returns {object | null} 实体或 null。
    */
   findByIdAndUser(id, userId) {
     return mapSalary(
@@ -163,12 +163,12 @@ export class SalaryRecordRepository {
   }
 
   /**
-   * Find a record by its natural key (user, year, month).
+   * 按自然键（user、year、month）查找记录。
    *
-   * @param {number} userId - Owner id.
-   * @param {number} year - Year.
-   * @param {number} month - Month (0 = annual bonus).
-   * @returns {object | null} Entity or null.
+   * @param {number} userId - 所有者 id。
+   * @param {number} year - 年份。
+   * @param {number} month - 月份（0 = 年终奖）。
+   * @returns {object | null} 实体或 null。
    */
   findByUserYearMonth(userId, year, month) {
     return mapSalary(
@@ -179,10 +179,10 @@ export class SalaryRecordRepository {
   }
 
   /**
-   * Insert a new salary record.
+   * 插入新的工资记录。
    *
-   * @param {object} entity - Salary entity (money as cents).
-   * @returns {object} The inserted entity.
+   * @param {object} entity - 工资实体（金额以分为单位）。
+   * @returns {object} 已插入的实体。
    */
   insert(entity) {
     const now = nowDateTime();
@@ -204,12 +204,12 @@ export class SalaryRecordRepository {
   }
 
   /**
-   * Update an existing salary record.
+   * 更新现有工资记录。
    *
-   * @param {number} id - Record id.
-   * @param {number} userId - Owner id.
-   * @param {object} entity - Salary entity (money as cents).
-   * @returns {object | null} Updated entity.
+   * @param {number} id - 记录 id。
+   * @param {number} userId - 所有者 id。
+   * @param {object} entity - 工资实体（金额以分为单位）。
+   * @returns {object | null} 已更新的实体。
    */
   update(id, userId, entity) {
     const params = { ...toParams(entity), id, user_id: userId, updated_at: nowDateTime() };
@@ -223,11 +223,11 @@ export class SalaryRecordRepository {
   }
 
   /**
-   * Delete a record scoped to its owner.
+   * 删除归属指定所有者的记录。
    *
-   * @param {number} id - Record id.
-   * @param {number} userId - Owner id.
-   * @returns {boolean} True when a row was deleted.
+   * @param {number} id - 记录 id。
+   * @param {number} userId - 所有者 id。
+   * @returns {boolean} 删除了一行时为 true。
    */
   deleteByIdAndUser(id, userId) {
     return (

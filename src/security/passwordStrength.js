@@ -1,19 +1,19 @@
 /**
- * @file Password strength evaluation.
+ * @file 密码强度评估。
  *
- * Mirrors the Java `PasswordStrengthUtil.evaluate` scoring exactly:
- * - length >= 12 -> +40, else >= 8 -> +25, else >= 6 -> +10
- * - contains lowercase -> +15
- * - contains uppercase -> +15
- * - contains digit -> +15
- * - contains special (not a letter or digit) -> +15
- * - score is capped at 100
- * - level: score >= 70 -> STRONG, >= 40 -> MEDIUM, otherwise WEAK
- * - empty/blank input -> score 0, level WEAK
+ * 精确对齐 Java `PasswordStrengthUtil.evaluate` 评分方式：
+ * - length >= 12 -> +40，否则 >= 8 -> +25，否则 >= 6 -> +10
+ * - 包含小写字母 -> +15
+ * - 包含大写字母 -> +15
+ * - 包含数字 -> +15
+ * - 包含特殊字符（不是字母或数字）-> +15
+ * - score 上限为 100
+ * - level：score >= 70 -> STRONG，>= 40 -> MEDIUM，否则 WEAK
+ * - 空/空白输入 -> score 0，level WEAK
  */
 
 /**
- * Strength levels.
+ * 强度等级。
  *
  * @readonly
  * @enum {string}
@@ -26,15 +26,15 @@ export const StrengthLevel = Object.freeze({
 
 /**
  * @typedef {object} StrengthResult
- * @property {number} score - Numeric score in the range [0, 100].
- * @property {string} level - One of {@link StrengthLevel}.
+ * @property {number} score - 范围 [0, 100] 内的数字评分。
+ * @property {string} level - {@link StrengthLevel} 之一。
  */
 
 /**
- * Evaluate the strength of a password.
+ * 评估密码强度。
  *
- * @param {string | null | undefined} password - Password to score.
- * @returns {StrengthResult} The score and level.
+ * @param {string | null | undefined} password - 要评分的密码。
+ * @returns {StrengthResult} 评分和等级。
  */
 export function evaluate(password) {
   if (password === null || password === undefined || password.length === 0) {
@@ -60,8 +60,8 @@ export function evaluate(password) {
   if (/[0-9]/.test(password)) {
     score += 15;
   }
-  // "special" mirrors Java's !Character.isLetterOrDigit: any character that is
-  // not an ASCII letter or digit. Approximated with an ASCII-oriented class.
+  // "special" 对齐 Java 的 !Character.isLetterOrDigit：任何
+  // 非 ASCII 字母或数字的字符。使用面向 ASCII 的字符类近似。
   if (/[^A-Za-z0-9]/.test(password)) {
     score += 15;
   }

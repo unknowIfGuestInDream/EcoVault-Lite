@@ -2,36 +2,36 @@ import { ValidationError } from './errors.js';
 import { isValidDate } from '../utils/datetime.js';
 
 /**
- * @file Request validation.
+ * @file 请求校验。
  *
- * Mirrors the Java bean-validation constraints on the request DTOs. Each
- * `validate*` function returns a normalised object on success, or throws a
- * {@link ValidationError} whose message is the failed field messages joined by
- * `"; "` (matching the Java `GlobalExceptionHandler` behaviour).
+ * 对齐 Java 请求 DTO 上的 bean-validation 约束。每个
+ * `validate*` 函数成功时返回规范化对象，或抛出
+ * {@link ValidationError}，其消息为校验失败的字段消息以
+ * `"; "` 拼接（匹配 Java `GlobalExceptionHandler` 行为）。
  */
 
 /**
- * Whether a value is "blank" (null/undefined or only whitespace).
+ * 判断值是否为 "blank"（null/undefined 或仅包含空白字符）。
  *
- * @param {unknown} value - Candidate value.
- * @returns {boolean} True when the value is blank.
+ * @param {unknown} value - 候选值。
+ * @returns {boolean} 值为空白时返回 true。
  */
 function isBlank(value) {
   return value === null || value === undefined || String(value).trim() === '';
 }
 
 /**
- * Length of a string value (0 for null/undefined).
+ * 字符串值的长度（null/undefined 时为 0）。
  *
- * @param {unknown} value - Candidate value.
- * @returns {number} String length.
+ * @param {unknown} value - 候选值。
+ * @returns {number} 字符串长度。
  */
 function len(value) {
   return value === null || value === undefined ? 0 : String(value).length;
 }
 
 /**
- * A small collector of validation messages.
+ * 一个小型校验消息收集器。
  */
 class Errors {
   constructor() {
@@ -40,10 +40,10 @@ class Errors {
   }
 
   /**
-   * Add a message when the condition holds.
+   * 条件成立时添加消息。
    *
-   * @param {boolean} condition - When true, the message is recorded.
-   * @param {string} message - Message to record.
+   * @param {boolean} condition - 为 true 时记录消息。
+   * @param {string} message - 要记录的消息。
    * @returns {void}
    */
   addIf(condition, message) {
@@ -53,7 +53,7 @@ class Errors {
   }
 
   /**
-   * Throw a {@link ValidationError} if any messages were collected.
+   * 如果收集到任何消息，则抛出 {@link ValidationError}。
    *
    * @returns {void}
    */
@@ -65,10 +65,10 @@ class Errors {
 }
 
 /**
- * Coerce a value to a finite number or return undefined.
+ * 将值强制转换为有限数字，或返回 undefined。
  *
- * @param {unknown} value - Candidate value.
- * @returns {number | undefined} Parsed number or undefined.
+ * @param {unknown} value - 候选值。
+ * @returns {number | undefined} 解析后的数字或 undefined。
  */
 function toNumberOrUndefined(value) {
   if (value === null || value === undefined || value === '') {
@@ -79,11 +79,11 @@ function toNumberOrUndefined(value) {
 }
 
 /**
- * Validate a registration request.
+ * 校验注册请求。
  *
- * @param {object} body - Raw request body.
- * @returns {object} Normalised request.
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {object} 规范化后的请求。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validateRegister(body = {}) {
   const errors = new Errors();
@@ -110,11 +110,11 @@ export function validateRegister(body = {}) {
 }
 
 /**
- * Validate a login request.
+ * 校验登录请求。
  *
- * @param {object} body - Raw request body.
- * @returns {{ username: string, password: string }} Normalised request.
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {{ username: string, password: string }} 规范化后的请求。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validateLogin(body = {}) {
   const errors = new Errors();
@@ -125,11 +125,11 @@ export function validateLogin(body = {}) {
 }
 
 /**
- * Validate a change-password request.
+ * 校验修改密码请求。
  *
- * @param {object} body - Raw request body.
- * @returns {{ oldPassword: string, newPassword: string }} Normalised request.
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {{ oldPassword: string, newPassword: string }} 规范化后的请求。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validateChangePassword(body = {}) {
   const errors = new Errors();
@@ -147,11 +147,11 @@ export function validateChangePassword(body = {}) {
 }
 
 /**
- * Validate a profile-update request.
+ * 校验资料更新请求。
  *
- * @param {object} body - Raw request body.
- * @returns {{ nickname: (string|null), email: (string|null) }} Normalised request.
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {{ nickname: (string|null), email: (string|null) }} 规范化后的请求。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validateUpdateProfile(body = {}) {
   const errors = new Errors();
@@ -162,11 +162,11 @@ export function validateUpdateProfile(body = {}) {
 }
 
 /**
- * Validate a verify-password request.
+ * 校验密码验证请求。
  *
- * @param {object} body - Raw request body.
- * @returns {{ password: string }} Normalised request.
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {{ password: string }} 规范化后的请求。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validateVerifyPassword(body = {}) {
   const errors = new Errors();
@@ -176,11 +176,11 @@ export function validateVerifyPassword(body = {}) {
 }
 
 /**
- * Normalise a tag list input into an array of strings.
+ * 将标签列表输入规范化为字符串数组。
  *
- * @param {unknown} tags - Raw tags value.
- * @param {Errors} errors - Error collector.
- * @returns {string[] | null} Normalised tags or null.
+ * @param {unknown} tags - 原始标签值。
+ * @param {Errors} errors - 错误收集器。
+ * @returns {string[] | null} 规范化后的标签或 null。
  */
 function normaliseTagsInput(tags, errors) {
   if (tags === null || tags === undefined) {
@@ -194,11 +194,11 @@ function normaliseTagsInput(tags, errors) {
 }
 
 /**
- * Validate a password-entry request.
+ * 校验密码条目请求。
  *
- * @param {object} body - Raw request body.
- * @returns {object} Normalised request.
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {object} 规范化后的请求。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validatePasswordEntry(body = {}) {
   const errors = new Errors();
@@ -224,7 +224,7 @@ export function validatePasswordEntry(body = {}) {
   };
 }
 
-/** Money field names accepted on a salary request. */
+/** 工资请求中接受的金额字段名。 */
 const SALARY_MONEY_FIELDS = [
   'baseSalary',
   'performanceSalary',
@@ -248,11 +248,11 @@ const SALARY_MONEY_FIELDS = [
 ];
 
 /**
- * Validate a salary request.
+ * 校验工资请求。
  *
- * @param {object} body - Raw request body.
- * @returns {object} Normalised request (year/month ints, money numbers).
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {object} 规范化后的请求（year/month 为整数，金额为数字）。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validateSalary(body = {}) {
   const errors = new Errors();
@@ -289,11 +289,11 @@ export function validateSalary(body = {}) {
 }
 
 /**
- * Validate a ledger request.
+ * 校验账本请求。
  *
- * @param {object} body - Raw request body.
- * @returns {object} Normalised request.
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {object} 规范化后的请求。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validateLedger(body = {}) {
   const errors = new Errors();
@@ -321,11 +321,11 @@ export function validateLedger(body = {}) {
 }
 
 /**
- * Validate an admin user-update request.
+ * 校验管理员用户更新请求。
  *
- * @param {object} body - Raw request body.
- * @returns {object} Normalised request.
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {object} 规范化后的请求。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validateUpdateUser(body = {}) {
   const errors = new Errors();
@@ -354,11 +354,11 @@ export function validateUpdateUser(body = {}) {
 }
 
 /**
- * Validate a log-update request.
+ * 校验日志更新请求。
  *
- * @param {object} body - Raw request body.
- * @returns {{ module: (string|null), operation: (string|null) }} Normalised request.
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {{ module: (string|null), operation: (string|null) }} 规范化后的请求。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validateUpdateLog(body = {}) {
   const errors = new Errors();
@@ -369,11 +369,11 @@ export function validateUpdateLog(body = {}) {
 }
 
 /**
- * Validate a role-permission update request.
+ * 校验角色权限更新请求。
  *
- * @param {object} body - Raw request body.
- * @returns {{ pages: (string[]|null) }} Normalised request.
- * @throws {ValidationError} On constraint violations.
+ * @param {object} body - 原始请求体。
+ * @returns {{ pages: (string[]|null) }} 规范化后的请求。
+ * @throws {ValidationError} 约束违反时抛出。
  */
 export function validateUpdateRolePermission(body = {}) {
   const errors = new Errors();

@@ -1,19 +1,19 @@
 /**
- * @file Typed application errors.
+ * @file 类型化应用错误。
  *
- * These map onto the HTTP responses produced by the global error handler and
- * mirror the exception hierarchy of the Java service (BusinessException,
- * AccessDeniedException, AuthenticationException).
+ * 这些错误映射到全局错误处理器生成的 HTTP 响应，并
+ * 对齐 Java 服务的异常层次结构（BusinessException、
+ * AccessDeniedException、AuthenticationException）。
  */
 
 /**
- * Base application error carrying an HTTP status and a response code.
+ * 携带 HTTP 状态码和响应码的基础应用错误。
  */
 export class AppError extends Error {
   /**
-   * @param {string} message - Human-readable message (returned to the client).
-   * @param {number} status - HTTP status code.
-   * @param {number} [code] - Business response code (defaults to `status`).
+   * @param {string} message - 人类可读的消息（返回给客户端）。
+   * @param {number} status - HTTP 状态码。
+   * @param {number} [code] - 业务响应码（默认值为 `status`）。
    */
   constructor(message, status, code) {
     super(message);
@@ -24,11 +24,11 @@ export class AppError extends Error {
 }
 
 /**
- * A recoverable, expected business rule violation (HTTP 400).
+ * 可恢复且符合预期的业务规则违反（HTTP 400）。
  */
 export class BusinessError extends AppError {
   /**
-   * @param {string} message - Explanation of the rule that was violated.
+   * @param {string} message - 对被违反规则的说明。
    */
   constructor(message) {
     super(message, 400);
@@ -36,11 +36,11 @@ export class BusinessError extends AppError {
 }
 
 /**
- * Authentication is required or the supplied credentials/token are invalid (HTTP 401).
+ * 需要认证，或提供的凭据/token 无效（HTTP 401）。
  */
 export class AuthError extends AppError {
   /**
-   * @param {string} [message] - Optional message.
+   * @param {string} [message] - 可选消息。
    */
   constructor(message = '未认证或登录已失效') {
     super(message, 401);
@@ -48,11 +48,11 @@ export class AuthError extends AppError {
 }
 
 /**
- * The caller is authenticated but not permitted to access the resource (HTTP 403).
+ * 调用方已认证，但没有访问该资源的权限（HTTP 403）。
  */
 export class AccessDeniedError extends AppError {
   /**
-   * @param {string} [message] - Optional message.
+   * @param {string} [message] - 可选消息。
    */
   constructor(message = '无权访问该资源') {
     super(message, 403);
@@ -60,11 +60,11 @@ export class AccessDeniedError extends AppError {
 }
 
 /**
- * A requested resource could not be found (HTTP 404).
+ * 找不到请求的资源（HTTP 404）。
  */
 export class NotFoundError extends AppError {
   /**
-   * @param {string} [message] - Optional message.
+   * @param {string} [message] - 可选消息。
    */
   constructor(message = '资源不存在') {
     super(message, 404);
@@ -72,14 +72,14 @@ export class NotFoundError extends AppError {
 }
 
 /**
- * One or more request fields failed validation (HTTP 400).
+ * 一个或多个请求字段校验失败（HTTP 400）。
  *
- * Mirrors the Java bean-validation handling where all field messages are joined
- * with `"; "` and returned with response code 400.
+ * 对齐 Java bean-validation 处理方式，其中所有字段消息会以
+ * `"; "` 拼接，并随响应码 400 返回。
  */
 export class ValidationError extends AppError {
   /**
-   * @param {string[] | string} messages - Field messages (joined with `"; "`).
+   * @param {string[] | string} messages - 字段消息（以 `"; "` 拼接）。
    */
   constructor(messages) {
     const list = Array.isArray(messages) ? messages : [messages];

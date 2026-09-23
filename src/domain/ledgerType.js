@@ -1,11 +1,11 @@
 /**
- * @file Ledger entry types.
+ * @file 账本条目类型。
  *
- * Mirrors the Java `LedgerType` enum used by the income/expense ledger.
+ * 对齐收入/支出账本使用的 Java `LedgerType` 枚举。
  */
 
 /**
- * Supported ledger entry types.
+ * 支持的账本条目类型。
  *
  * @readonly
  * @enum {string}
@@ -16,17 +16,17 @@ export const LedgerType = Object.freeze({
 });
 
 /**
- * All ledger type values.
+ * 所有账本类型值。
  *
  * @type {ReadonlyArray<string>}
  */
 export const LEDGER_TYPE_VALUES = Object.freeze(Object.values(LedgerType));
 
 /**
- * Type guard for a valid ledger type.
+ * 有效账本类型的类型守卫。
  *
- * @param {unknown} value - Candidate value.
- * @returns {boolean} True when the value is a recognised ledger type.
+ * @param {unknown} value - 候选值。
+ * @returns {boolean} 值为已识别的账本类型时返回 true。
  */
 export function isLedgerType(value) {
   return typeof value === 'string' && LEDGER_TYPE_VALUES.includes(value);

@@ -2,20 +2,20 @@ import { verifyToken } from '../security/jwt.js';
 import { AuthError, AccessDeniedError } from '../common/errors.js';
 
 /**
- * @file Authentication & authorization hooks.
+ * @file 认证与授权钩子。
  *
- * Reproduces the behaviour of the Java `JwtAuthenticationFilter` +
- * `SecurityConfig` pair:
- * - Tokens are resolved from an `Authorization: Bearer` header or the
- *   `ECOVAULT_TOKEN` cookie and validated against the active session store.
- * - Authorization is enforced centrally by URL pattern (public / admin / other)
- *   rather than per-route.
+ * 复现 Java `JwtAuthenticationFilter` +
+ * `SecurityConfig` 组合的行为：
+ * - token 从 `Authorization: Bearer` header 或
+ *   `ECOVAULT_TOKEN` cookie 中解析，并根据活跃会话存储进行校验。
+ * - 授权按 URL 模式集中强制执行（public / admin / other），
+ *   而不是逐路由执行。
  */
 
-/** Cookie name carrying the auth token (mirrors Java). */
+/** 携带认证 token 的 Cookie 名称（对齐 Java）。 */
 export const TOKEN_COOKIE = 'ECOVAULT_TOKEN';
 
-/** Exact paths that are always public. */
+/** 始终公开的精确路径。 */
 const PUBLIC_EXACT = new Set([
   '/',
   '/login',
@@ -25,17 +25,17 @@ const PUBLIC_EXACT = new Set([
   '/health',
 ]);
 
-/** Path prefixes that are always public. */
+/** 始终公开的路径前缀。 */
 const PUBLIC_PREFIXES = ['/css/', '/js/', '/images/', '/webjars/'];
 
-/** Base paths (with `/**`) that require the ADMIN role. */
+/** 需要 ADMIN 角色的基础路径（带 `/**`）。 */
 const ADMIN_BASES = ['/actuator', '/admin', '/api/admin', '/api/logs'];
 
 /**
- * Extract the path portion (without query string) of a request URL.
+ * 提取请求 URL 的路径部分（不含查询字符串）。
  *
- * @param {string} url - Raw request URL.
- * @returns {string} Path portion.
+ * @param {string} url - 原始请求 URL。
+ * @returns {string} 路径部分。
  */
 function pathOf(url) {
   const index = url.indexOf('?');
@@ -43,10 +43,10 @@ function pathOf(url) {
 }
 
 /**
- * Whether a path is publicly accessible.
+ * 判断路径是否可公开访问。
  *
- * @param {string} path - Request path.
- * @returns {boolean} True when no authentication is required.
+ * @param {string} path - 请求路径。
+ * @returns {boolean} 不需要认证时返回 true。
  */
 function isPublic(path) {
   if (PUBLIC_EXACT.has(path)) {
@@ -56,31 +56,31 @@ function isPublic(path) {
 }
 
 /**
- * Whether a path requires the ADMIN role (Ant-style `/base/**`).
+ * 判断路径是否需要 ADMIN 角色（Ant 风格 `/base/**`）。
  *
- * @param {string} path - Request path.
- * @returns {boolean} True when the path is admin-only.
+ * @param {string} path - 请求路径。
+ * @returns {boolean} 路径仅管理员可访问时返回 true。
  */
 function isAdminPath(path) {
   return ADMIN_BASES.some((base) => path === base || path.startsWith(`${base}/`));
 }
 
 /**
- * Whether a path belongs to the JSON API surface (used to choose between a 401
- * response and a redirect to the login page).
+ * 判断路径是否属于 JSON API 表面（用于在 401
+ * 响应与重定向到登录页之间选择）。
  *
- * @param {string} path - Request path.
- * @returns {boolean} True for `/api/...` paths.
+ * @param {string} path - 请求路径。
+ * @returns {boolean} `/api/...` 路径返回 true。
  */
 function isApiPath(path) {
   return path.startsWith('/api/');
 }
 
 /**
- * Resolve the bearer token from the request (header first, then cookie).
+ * 从请求中解析 bearer token（先 header，后 cookie）。
  *
- * @param {object} request - Incoming request.
- * @returns {string | null} The raw JWT, or null when absent.
+ * @param {object} request - 传入请求。
+ * @returns {string | null} 原始 JWT；不存在时返回 null。
  */
 export function resolveToken(request) {
   const header = request.headers?.authorization;
@@ -95,16 +95,16 @@ export function resolveToken(request) {
 }
 
 /**
- * Register the authentication and authorization hooks on a Fastify instance.
+ * 在 Fastify 实例上注册认证和授权钩子。
  *
- * @param {object} app - Fastify instance.
- * @param {AppContext} context - Application context.
+ * @param {object} app - Fastify 实例。
+ * @param {AppContext} context - 应用上下文。
  * @returns {void}
  */
 export function registerSecurity(app, context) {
   const { userRepository, userSessionRepository } = context.repositories;
 
-  // 1. Authentication: resolve the current user without ever rejecting.
+  // 1. 认证：解析当前用户，且绝不拒绝。
   app.addHook('onRequest', async (request) => {
     request.user = null;
     request.auth = null;
@@ -130,7 +130,7 @@ export function registerSecurity(app, context) {
     request.auth = { jti: claims.jti, userId: user.id };
   });
 
-  // 2. Authorization: enforce access by URL pattern.
+  // 2. 授权：按 URL 模式强制执行访问控制。
   app.addHook('onRequest', async (request, reply) => {
     const path = pathOf(request.url);
     if (isPublic(path)) {

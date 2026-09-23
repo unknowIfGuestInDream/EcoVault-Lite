@@ -1,14 +1,14 @@
 import { nowDateTime } from '../utils/datetime.js';
 
 /**
- * @file User session (JWT jti registry) repository.
+ * @file 用户会话（JWT jti 注册表）仓储。
  */
 
 /**
- * Map a raw row to a session entity.
+ * 将原始行映射为会话实体。
  *
- * @param {object | undefined} row - Raw row.
- * @returns {object | null} Session entity (with `active` as boolean) or null.
+ * @param {object | undefined} row - 原始行。
+ * @returns {object | null} 会话实体（`active` 为布尔值）或 null。
  */
 function mapSession(row) {
   if (!row) {
@@ -27,11 +27,11 @@ function mapSession(row) {
 }
 
 /**
- * Repository for the `user_sessions` table.
+ * `user_sessions` 表的仓储。
  */
 export class UserSessionRepository {
   /**
-   * @param {object} db - Database handle.
+   * @param {object} db - 数据库句柄。
    */
   constructor(db) {
     /** @type {object} */
@@ -39,20 +39,20 @@ export class UserSessionRepository {
   }
 
   /**
-   * Find a session by its JWT id.
+   * 按 JWT id 查找会话。
    *
-   * @param {string} jti - Token identifier.
-   * @returns {object | null} Session entity or null.
+   * @param {string} jti - 令牌标识符。
+   * @returns {object | null} 会话实体或 null。
    */
   findByJti(jti) {
     return mapSession(this.db.prepare('SELECT * FROM user_sessions WHERE jti = ?').get(jti));
   }
 
   /**
-   * List a user's active sessions ordered by creation time ascending.
+   * 列出用户的活跃会话，按创建时间升序排序。
    *
-   * @param {number} userId - User id.
-   * @returns {object[]} Active session entities (oldest first).
+   * @param {number} userId - 用户 id。
+   * @returns {object[]} 活跃会话实体（最旧优先）。
    */
   findActiveByUser(userId) {
     return this.db
@@ -64,10 +64,10 @@ export class UserSessionRepository {
   }
 
   /**
-   * Create a new active session.
+   * 创建新的活跃会话。
    *
-   * @param {object} session - Session details.
-   * @returns {object} The created session entity.
+   * @param {object} session - 会话详情。
+   * @returns {object} 已创建的会话实体。
    */
   insert(session) {
     const now = nowDateTime();
@@ -90,9 +90,9 @@ export class UserSessionRepository {
   }
 
   /**
-   * Refresh the `last_active_at` timestamp of a session.
+   * 刷新会话的 `last_active_at` 时间戳。
    *
-   * @param {string} jti - Token identifier.
+   * @param {string} jti - 令牌标识符。
    * @returns {void}
    */
   touch(jti) {
@@ -102,10 +102,10 @@ export class UserSessionRepository {
   }
 
   /**
-   * Deactivate a single session by jti.
+   * 按 jti 停用单个会话。
    *
-   * @param {string} jti - Token identifier.
-   * @returns {boolean} True when a row was updated.
+   * @param {string} jti - 令牌标识符。
+   * @returns {boolean} 更新了一行时为 true。
    */
   deactivateByJti(jti) {
     return (
@@ -114,10 +114,10 @@ export class UserSessionRepository {
   }
 
   /**
-   * Deactivate all active sessions of a user.
+   * 停用用户的所有活跃会话。
    *
-   * @param {number} userId - User id.
-   * @returns {number} Number of sessions deactivated.
+   * @param {number} userId - 用户 id。
+   * @returns {number} 已停用的会话数量。
    */
   deactivateAllByUser(userId) {
     return this.db

@@ -1,8 +1,8 @@
 /**
- * @file Unified API response envelope.
+ * @file 统一 API 响应封装。
  *
- * Mirrors the Java `ApiResponse<T>` shape `{ code, message, data }` where a
- * successful response uses code `0` and message `成功`.
+ * 对齐 Java `ApiResponse<T>` 结构 `{ code, message, data }`，其中
+ * 成功响应使用 code `0` 和 message `成功`。
  */
 
 const SUCCESS_CODE = 0;
@@ -11,29 +11,29 @@ const SUCCESS_MESSAGE = '成功';
 /**
  * @template T
  * @typedef {object} ApiResponseBody
- * @property {number} code - Response code (0 = success).
- * @property {string} message - Human-readable message.
- * @property {T | null} data - Payload (null when absent).
+ * @property {number} code - 响应码（0 = 成功）。
+ * @property {string} message - 人类可读的消息。
+ * @property {T | null} data - 载荷（不存在时为 null）。
  */
 
 /**
- * Build a success envelope.
+ * 构建成功响应封装。
  *
  * @template T
- * @param {T} [data] - Optional payload.
- * @param {string} [message] - Optional message (defaults to `成功`).
- * @returns {ApiResponseBody<T>} The success body.
+ * @param {T} [data] - 可选载荷。
+ * @param {string} [message] - 可选消息（默认值为 `成功`）。
+ * @returns {ApiResponseBody<T>} 成功响应体。
  */
 export function success(data = null, message = SUCCESS_MESSAGE) {
   return { code: SUCCESS_CODE, message, data: data ?? null };
 }
 
 /**
- * Build an error envelope.
+ * 构建错误响应封装。
  *
- * @param {number} code - Error code (typically the HTTP status).
- * @param {string} message - Error message.
- * @returns {ApiResponseBody<null>} The error body.
+ * @param {number} code - 错误码（通常为 HTTP 状态码）。
+ * @param {string} message - 错误消息。
+ * @returns {ApiResponseBody<null>} 错误响应体。
  */
 export function failure(code, message) {
   return { code, message, data: null };
