@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Runtime data (SQLite database files live here)
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Test / coverage output
+coverage/
+.nyc_output/
+.c8-*/
+junit.xml
+
+# Generated API documentation (JSDoc)
+docs-gen/
+
+# Build artifacts / packaged archives
+*.tgz
+dist/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment overrides (never commit real secrets)
+.env
+.env.local
+.env.*.local
+
+# Editor / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

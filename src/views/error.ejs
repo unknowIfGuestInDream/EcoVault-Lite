@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %> · EcoVault Lite</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/error.css" />
+  </head>
+  <body class="error-page">
+    <main class="error-shell">
+      <section class="error-card glass">
+        <p class="error-card__code">出错了</p>
+        <h1 class="error-card__title"><%= message %></h1>
+        <div class="error-card__actions">
+          <a class="btn btn--primary" href="/dashboard">返回控制台</a>
+          <a class="btn btn--ghost" href="/login">重新登录</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

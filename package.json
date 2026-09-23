@@ -1,0 +1,53 @@
+{
+  "name": "ecovault-lite",
+  "version": "1.0.0",
+  "description": "EcoVault Lite - 个人数据安全存储与智能管理平台 (Node.js 24 + SQLite3 轻量化版本)",
+  "type": "module",
+  "license": "MIT",
+  "author": "unknowIfGuestInDream",
+  "homepage": "https://github.com/unknowIfGuestInDream/EcoVault-Lite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/unknowIfGuestInDream/EcoVault-Lite.git"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "main": "src/server.js",
+  "bin": {
+    "ecovault-lite": "src/server.js"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test --test-reporter=spec",
+    "test:coverage": "c8 node --test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "docs": "jsdoc -c jsdoc.json"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/csrf-protection": "^8.0.1",
+    "@fastify/formbody": "^9.0.0",
+    "@fastify/static": "^10.1.4",
+    "@fastify/view": "^12.0.0",
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^13.0.3",
+    "dotenv": "^18.0.0",
+    "ejs": "^3.1.10",
+    "fastify": "^5.6.2",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "c8": "^12.0.0",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^16.0.0",
+    "jsdoc": "^4.0.5",
+    "prettier": "^3.6.0"
+  }
+}

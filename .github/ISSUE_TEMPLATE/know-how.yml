@@ -1,0 +1,15 @@
+name: 知识库
+description: 在此记录知识库内容
+title: '[知识库] '
+labels:
+  - 知识库
+assignees: unknowIfGuestInDream
+body:
+  - type: textarea
+    id: knowHow
+    attributes:
+      label: 描述知识库内容
+      description: 这份知识库的用途是什么
+      placeholder: 在此写下您的知识库内容
+    validations:
+      required: true

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %> · EcoVault Lite</title>
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <link rel="stylesheet" href="/css/login.css" />
+  </head>
+  <body class="login-page">
+    <main class="login-shell">
+      <section class="login-card glass" aria-labelledby="login-title">
+        <header class="login-card__head">
+          <div class="brand-mark" aria-hidden="true">EV</div>
+          <h1 id="login-title" class="login-card__title">EcoVault Lite</h1>
+          <p class="login-card__subtitle">个人数据安全存储与智能管理平台</p>
+        </header>
+        <form id="login-form" class="login-form" autocomplete="off" novalidate>
+          <label class="field">
+            <span class="field__label">用户名</span>
+            <input
+              class="field__input"
+              type="text"
+              name="username"
+              id="login-username"
+              placeholder="请输入用户名"
+              required
+            />
+          </label>
+          <label class="field">
+            <span class="field__label">密码</span>
+            <input
+              class="field__input"
+              type="password"
+              name="password"
+              id="login-password"
+              placeholder="请输入密码"
+              required
+            />
+          </label>
+          <p class="login-form__error" id="login-error" role="alert" hidden></p>
+          <button class="btn btn--primary" type="submit" id="login-submit">登录</button>
+        </form>
+        <footer class="login-card__foot">
+          <button
+            type="button"
+            class="theme-toggle"
+            id="theme-toggle"
+            aria-label="切换主题"
+          >
+            切换主题
+          </button>
+        </footer>
+      </section>
+    </main>
+    <script src="/js/theme.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/login.js"></script>
+  </body>
+</html>
