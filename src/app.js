@@ -40,7 +40,7 @@ function pathOf(url) {
  * @param {AppContext} context - 应用上下文（仓储 + 服务）。
  * @param {object} [options] - 可选项。
  * @param {boolean|object} [options.logger] - Fastify 日志设置（默认关闭）。
- * @returns {Promise<import('fastify').FastifyInstance>} 已装配的应用实例。
+ * @returns {Promise<object>} 已装配的应用实例（Fastify 实例）。
  */
 export async function buildApp(context, options = {}) {
   const app = Fastify({ logger: options.logger ?? false });

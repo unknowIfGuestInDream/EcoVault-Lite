@@ -9,7 +9,7 @@
     logout.addEventListener('click', async function () {
       try {
         await window.EcoVaultApi.post('/api/auth/logout', {});
-      } catch (_error) {
+      } catch {
         // 退出接口失败也不阻塞跳转，直接返回登录页。
       }
       window.location.assign('/login');

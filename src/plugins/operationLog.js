@@ -90,7 +90,11 @@ function maskValue(value) {
  * @returns {string | null} 脱敏后的 JSON 字符串（截断），无请求体时为 null。
  */
 export function maskParams(body) {
-  if (body === null || body === undefined || (typeof body === 'object' && !Array.isArray(body) && Object.keys(body).length === 0)) {
+  if (
+    body === null ||
+    body === undefined ||
+    (typeof body === 'object' && !Array.isArray(body) && Object.keys(body).length === 0)
+  ) {
     return null;
   }
   const json = JSON.stringify(maskValue(body));

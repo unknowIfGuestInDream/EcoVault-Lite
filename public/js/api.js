@@ -41,10 +41,10 @@
       options.body = JSON.stringify(body);
     }
     var response = await window.fetch(url, options);
-    var payload = null;
+    var payload;
     try {
       payload = await response.json();
-    } catch (_error) {
+    } catch {
       payload = null;
     }
     if (!payload || payload.code !== 0) {
