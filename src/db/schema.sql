@@ -1,7 +1,6 @@
--- EcoVault Lite SQLite schema.
--- Money columns are stored as INTEGER cents to preserve exact 2-decimal
--- precision (the Java version used BigDecimal). Timestamps are stored as
--- `yyyy-MM-dd HH:mm:ss` text so range queries sort lexicographically.
+-- EcoVault Lite SQLite 数据库结构。
+-- 金额列以整数分(INTEGER cents)存储，以保留精确的两位小数精度。
+-- 时间戳以 `yyyy-MM-dd HH:mm:ss` 文本存储，使范围查询按字典序排序正确。
 
 PRAGMA foreign_keys = ON;
 

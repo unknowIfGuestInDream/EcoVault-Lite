@@ -3,8 +3,7 @@ import { nowDateTime } from '../utils/datetime.js';
 /**
  * @file 收入/支出账本仓储。
  *
- * 标签存放在 `ledger_entry_tags` 子表中（对应 Java
- * `@ElementCollection`）。金额以整数分存储并返回。
+ * 标签存放在 `ledger_entry_tags` 子表中。金额以整数分存储并返回。
  */
 
 /**
@@ -33,9 +32,9 @@ export class LedgerEntryRepository {
   }
 
   /**
-   * 将原始行及其标签映射到账本实体。
+   * 将数据库行及其标签映射到账本实体。
    *
-   * @param {object | undefined} row - 原始行。
+   * @param {object | undefined} row - 数据库行。
    * @returns {object | null} 实体或 null。
    */
   #map(row) {

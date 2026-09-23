@@ -3,7 +3,7 @@ import process from 'node:process';
 /**
  * @file 日期/时间格式化辅助工具。
  *
- * 原始 Java 服务以 GMT+8 时区将时间戳格式化为 `yyyy-MM-dd HH:mm:ss`。
+ * 时间戳按配置的固定时区偏移格式化为 `yyyy-MM-dd HH:mm:ss`。
  * 为了不受主机时区影响而保持确定性，我们
  * 应用固定偏移量（可通过 `ECOVAULT_TZ_OFFSET_MINUTES` 配置，
  * 默认 480 分钟 = GMT+8），并根据偏移后的 UTC 部分格式化。

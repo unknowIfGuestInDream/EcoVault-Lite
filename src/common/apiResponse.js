@@ -1,7 +1,7 @@
 /**
  * @file 统一 API 响应封装。
  *
- * 对齐 Java `ApiResponse<T>` 结构 `{ code, message, data }`，其中
+ * 统一响应结构 `{ code, message, data }`，其中
  * 成功响应使用 code `0` 和 message `成功`。
  */
 

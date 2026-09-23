@@ -1,6 +1,6 @@
 # EcoVault Lite AI 协作指令
 
-你正在协助开发 EcoVault Lite（生态保险箱·轻量版），这是一个个人数据安全存储与智能管理平台。它由原 Java / Spring Boot 项目 [EcoVault](https://github.com/unknowIfGuestInDream/EcoVault) 迁移而来，目标是基于 **Node.js 24 + SQLite3** 实现更低内存占用的轻量化单机版本。所有生成内容必须遵循以下规则。
+你正在协助开发 EcoVault Lite（生态保险箱·轻量版），这是一个个人数据安全存储与智能管理平台，基于 **Node.js 24 + SQLite3** 构建，目标是实现低内存占用的轻量化单机版本。所有生成内容必须遵循以下规则。
 
 ## 基础信息
 
@@ -49,7 +49,7 @@
 ## 文档与安全规则
 
 - 每次功能、接口、数据库、安全策略或部署流程变更都要同步更新 `docs` 文档。
-- 使用 JSDoc 维护 API 文档（`npm run docs`），不再使用 Doxygen。
+- 使用 JSDoc 维护 API 文档（`npm run docs`）。
 - 检查代码不要包含私密信息，包括真实密钥、Token、密码、数据库文件、证书与生产配置。
 - 日志、异常、导出文件与页面展示不得泄露敏感信息。
 - 生成示例配置时只能使用占位符。

@@ -1,8 +1,7 @@
 name: JSDoc 文档生成
 
-# 迁移说明：原 Java 项目使用 Doxygen 生成文档；EcoVault Lite 改用 Node.js 生态更自然的
-# JSDoc（详见 docs/MIGRATION.md 中的文档工具决策）。本工作流在源码或文档变更时生成
-# JSDoc HTML 文档并上传为构建产物。
+# 本工作流在源码或文档配置变更时生成 JSDoc HTML 文档，
+# 并将生成结果上传为构建产物，便于审阅 API 注释与接口说明。
 on:
   push:
     branches: ['master']

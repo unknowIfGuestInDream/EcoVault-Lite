@@ -1,9 +1,7 @@
 /**
  * @file 类型化应用错误。
  *
- * 这些错误映射到全局错误处理器生成的 HTTP 响应，并
- * 对齐 Java 服务的异常层次结构（BusinessException、
- * AccessDeniedException、AuthenticationException）。
+ * 这些错误映射到全局错误处理器生成的 HTTP 响应。
  */
 
 /**
@@ -74,8 +72,7 @@ export class NotFoundError extends AppError {
 /**
  * 一个或多个请求字段校验失败（HTTP 400）。
  *
- * 对齐 Java bean-validation 处理方式，其中所有字段消息会以
- * `"; "` 拼接，并随响应码 400 返回。
+ * 所有字段消息会以 `"; "` 拼接，并随响应码 400 返回。
  */
 export class ValidationError extends AppError {
   /**

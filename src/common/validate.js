@@ -4,10 +4,9 @@ import { isValidDate } from '../utils/datetime.js';
 /**
  * @file 请求校验。
  *
- * 对齐 Java 请求 DTO 上的 bean-validation 约束。每个
- * `validate*` 函数成功时返回规范化对象，或抛出
+ * 请求校验规则。每个 `validate*` 函数成功时返回规范化对象，或抛出
  * {@link ValidationError}，其消息为校验失败的字段消息以
- * `"; "` 拼接（匹配 Java `GlobalExceptionHandler` 行为）。
+ * `"; "` 拼接。
  */
 
 /**
@@ -81,7 +80,7 @@ function toNumberOrUndefined(value) {
 /**
  * 校验注册请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {object} 规范化后的请求。
  * @throws {ValidationError} 约束违反时抛出。
  */
@@ -112,7 +111,7 @@ export function validateRegister(body = {}) {
 /**
  * 校验登录请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {{ username: string, password: string }} 规范化后的请求。
  * @throws {ValidationError} 约束违反时抛出。
  */
@@ -127,7 +126,7 @@ export function validateLogin(body = {}) {
 /**
  * 校验修改密码请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {{ oldPassword: string, newPassword: string }} 规范化后的请求。
  * @throws {ValidationError} 约束违反时抛出。
  */
@@ -149,7 +148,7 @@ export function validateChangePassword(body = {}) {
 /**
  * 校验资料更新请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {{ nickname: (string|null), email: (string|null) }} 规范化后的请求。
  * @throws {ValidationError} 约束违反时抛出。
  */
@@ -164,7 +163,7 @@ export function validateUpdateProfile(body = {}) {
 /**
  * 校验密码验证请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {{ password: string }} 规范化后的请求。
  * @throws {ValidationError} 约束违反时抛出。
  */
@@ -178,7 +177,7 @@ export function validateVerifyPassword(body = {}) {
 /**
  * 将标签列表输入规范化为字符串数组。
  *
- * @param {unknown} tags - 原始标签值。
+ * @param {unknown} tags - 标签值。
  * @param {Errors} errors - 错误收集器。
  * @returns {string[] | null} 规范化后的标签或 null。
  */
@@ -196,7 +195,7 @@ function normaliseTagsInput(tags, errors) {
 /**
  * 校验密码条目请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {object} 规范化后的请求。
  * @throws {ValidationError} 约束违反时抛出。
  */
@@ -250,7 +249,7 @@ const SALARY_MONEY_FIELDS = [
 /**
  * 校验工资请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {object} 规范化后的请求（year/month 为整数，金额为数字）。
  * @throws {ValidationError} 约束违反时抛出。
  */
@@ -291,7 +290,7 @@ export function validateSalary(body = {}) {
 /**
  * 校验账本请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {object} 规范化后的请求。
  * @throws {ValidationError} 约束违反时抛出。
  */
@@ -323,7 +322,7 @@ export function validateLedger(body = {}) {
 /**
  * 校验管理员用户更新请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {object} 规范化后的请求。
  * @throws {ValidationError} 约束违反时抛出。
  */
@@ -356,7 +355,7 @@ export function validateUpdateUser(body = {}) {
 /**
  * 校验日志更新请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {{ module: (string|null), operation: (string|null) }} 规范化后的请求。
  * @throws {ValidationError} 约束违反时抛出。
  */
@@ -371,7 +370,7 @@ export function validateUpdateLog(body = {}) {
 /**
  * 校验角色权限更新请求。
  *
- * @param {object} body - 原始请求体。
+ * @param {object} body - 请求体。
  * @returns {{ pages: (string[]|null) }} 规范化后的请求。
  * @throws {ValidationError} 约束违反时抛出。
  */

@@ -3,7 +3,7 @@ import { BusinessError } from '../common/errors.js';
 /**
  * @file 操作日志服务。
  *
- * 复现 Java `OperationLogServiceImpl`：审计条目持久化、
+ * 操作日志服务能力：审计条目持久化、
  * 分页/可筛选查询，以及小型更新/删除管理操作。
  */
 

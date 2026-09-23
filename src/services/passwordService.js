@@ -5,7 +5,7 @@ import { evaluate } from '../security/passwordStrength.js';
 /**
  * @file 密码保险箱服务。
  *
- * 复现 Java `PasswordServiceImpl`：secret/notes/tags 使用 AES 加密
+ * 密码保险箱服务能力：secret/notes/tags 使用 AES 加密
  * 静态存储，列表响应会脱敏 secret（并省略 notes/category/strength）
  * 但仍暴露解密后的 tags，详情响应会解密所有内容。
  */
@@ -16,7 +16,7 @@ export const MASKED_SECRET = '******';
 /**
  * 将逗号拼接的标签列表加密为单个密文。
  *
- * @param {string[] | null | undefined} tags - 原始标签。
+ * @param {string[] | null | undefined} tags - 输入标签。
  * @returns {string | null} 密文；没有可用标签时为 null。
  */
 function encryptTags(tags) {

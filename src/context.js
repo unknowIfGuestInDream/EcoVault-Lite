@@ -22,8 +22,7 @@ import { RolePermissionService } from './services/rolePermissionService.js';
  *
  * 从单个数据库句柄构建仓储和服务对象图。
  * 生产入口使用共享的单例数据库；测试会围绕
- * 内存数据库构建上下文以实现完全隔离。这对应了
- * 原 Java 应用中的 Spring 依赖注入容器。
+ * 内存数据库构建上下文以实现完全隔离。
  */
 
 /**
@@ -56,7 +55,7 @@ export function createContext(db) {
       userRepository: repositories.userRepository,
       sessionRepository: repositories.sessionRepository,
       tokenProvider,
-      maxDevices: config.maxDevices,
+      maxDevices: config.jwt.maxDevices,
     }),
     passwordService: new PasswordService({ repository: repositories.passwordEntryRepository }),
     salaryService: new SalaryService({ repository: repositories.salaryRecordRepository }),

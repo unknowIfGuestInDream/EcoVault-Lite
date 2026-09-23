@@ -7,15 +7,14 @@ dotenv.config({ quiet: true });
 /**
  * @file 集中式应用配置。
  *
- * 值来源于环境变量（可选择通过
- * `.env` 文件提供），并回退到与
- * 原 Java `application.yml` 对应的开发友好默认值。请参阅 `.env.example` 文档。
+ * 值来源于环境变量（可选择通过 `.env` 文件提供），
+ * 并回退到开发友好的默认值。请参阅 `.env.example` 文档。
  */
 
 /**
  * 解析整数环境变量，并提供回退值。
  *
- * @param {string | undefined} value - 原始环境变量值。
+ * @param {string | undefined} value - 环境变量值。
  * @param {number} fallback - 未设置或不是有限数字时的默认值。
  * @returns {number} 解析后的整数或回退值。
  */

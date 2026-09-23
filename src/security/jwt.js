@@ -5,9 +5,9 @@ import config from '../config/index.js';
 /**
  * @file JSON Web Token 提供器。
  *
- * 对齐 Java `JwtTokenProvider`：
+ * JWT 令牌生成与校验规则：
  * - 算法为 HS256。
- * - 签名密钥是已配置 secret 字符串的原始 SHA-256 摘要（32 字节），
+ * - 签名密钥是已配置 secret 字符串的 SHA-256 摘要（32 字节），
  *   而不是 secret 本身。
  * - 注册声明：`sub`（username）、`jti`（不带短横线的 UUID），以及
  *   保存数字用户 id 的自定义 `uid` 声明。

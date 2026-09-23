@@ -8,9 +8,9 @@ import { nowDateTime } from '../utils/datetime.js';
  */
 
 /**
- * 将原始行映射为密码条目实体。
+ * 将数据库行映射为密码条目实体。
  *
- * @param {object | undefined} row - 原始行。
+ * @param {object | undefined} row - 数据库行。
  * @returns {object | null} 实体或 null。
  */
 function mapEntry(row) {

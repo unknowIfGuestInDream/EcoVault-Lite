@@ -4,9 +4,7 @@ import config from '../config/index.js';
 /**
  * @file 用于加密敏感保险箱字段的 AES-256-GCM 辅助工具。
  *
- * 与原始 Java `AesUtil` 逐字节兼容：
- * - 密钥为已配置 secret 的 UTF-8 字节，并以零填充或
- *   截断为恰好 32 字节（等价于 `Arrays.copyOf(raw, 32)`）。
+ * - 密钥取配置 secret 的 UTF-8 字节，并以零填充或截断为恰好 32 字节。
  * - 每次加密都会生成新的随机 12 字节 IV。
  * - GCM 认证标签为 128 位（16 字节）。
  * - 存储的载荷为 `Base64(IV[12] || ciphertext || tag[16])`。
@@ -20,7 +18,7 @@ const ALGORITHM = 'aes-256-gcm';
 /**
  * 从 secret 字符串派生 32 字节 AES 密钥。
  *
- * @param {string} secret - 原始 secret 字符串。
+ * @param {string} secret - secret 字符串。
  * @returns {Buffer} 32 字节密钥缓冲区。
  */
 function deriveKey(secret) {

@@ -1,8 +1,7 @@
 /**
  * @file HTTP 请求辅助工具。
  *
- * 对齐操作日志切面使用的 Java `WebUtil` 客户端 IP 解析
- * 逻辑。
+ * 客户端 IP 解析逻辑。
  */
 
 /**
@@ -16,9 +15,9 @@ function isUsable(value) {
 }
 
 /**
- * 解析请求的原始客户端 IP。
+ * 解析请求的客户端 IP。
  *
- * 解析顺序对齐 Java `WebUtil.getClientIp`：
+ * 解析顺序：
  * 1. `X-Forwarded-For`（逗号前的第一个条目），可用时使用。
  * 2. `X-Real-IP`，可用时使用。
  * 3. socket 远端地址。

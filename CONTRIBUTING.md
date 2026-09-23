@@ -1,9 +1,8 @@
 # EcoVault Lite 贡献指南
 
-感谢你参与 EcoVault Lite（生态保险箱轻量版）建设。本项目由原 Java / Spring Boot 版
-[EcoVault](https://github.com/unknowIfGuestInDream/EcoVault) 迁移而来，现基于
-**Node.js 24 + SQLite3** 构建。提交贡献前，请先阅读 [README.md](README.md) 与
-[.github/copilot-instructions.md](.github/copilot-instructions.md)。
+感谢你参与 EcoVault Lite（生态保险箱轻量版）建设。本项目基于 **Node.js 24 + SQLite3**
+构建，面向个人数据安全存储与智能管理场景。提交贡献前，请先阅读 [README.md](README.md)
+与 [.github/copilot-instructions.md](.github/copilot-instructions.md)。
 
 ## 开发准备
 
@@ -72,11 +71,10 @@ fix: 修复单设备登录会话失效问题
 
 ## 文档与测试
 
-每次功能、接口、数据库、安全策略或部署流程变更，都必须同步更新文档与注释（本项目
-统一使用**中文注释**）。新增业务逻辑应补充 `node:test` 测试，核心安全逻辑应覆盖正常、
-异常与边界场景。API 文档由 JSDoc 生成（`npm run docs`）。
+每次功能、接口、数据库、安全策略或部署流程变更，都必须同步更新文档与注释（本项目统一使用**中文注释**）。
+新增业务逻辑应补充 `node:test` 测试，核心安全逻辑应覆盖正常、异常与边界场景。API 文档由 JSDoc 生成
+（`npm run docs`）。
 
 ## 安全提醒
 
-禁止提交真实敏感信息。示例配置必须使用占位符。发现安全漏洞时，请通过 GitHub 安全公告
-私密反馈渠道报告。
+禁止提交真实敏感信息。示例配置必须使用占位符。发现安全漏洞时，请通过 GitHub 安全公告私密反馈渠道报告。

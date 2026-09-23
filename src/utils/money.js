@@ -1,10 +1,9 @@
 /**
  * @file 精确金额算术辅助工具。
  *
- * Java 实现使用 scale 2 和 `HALF_UP` 舍入的 `BigDecimal`。
+ * 金额统一保留 2 位小数并采用 `HALF_UP` 舍入。
  * 为避免二进制浮点漂移，我们在内部将金额表示为
- * 整数分，并且只在 JSON
- * 边界转换为 JavaScript 数字（匹配 Jackson 将 `BigDecimal` 序列化为数字的行为）。
+ * 整数分，并且只在 JSON 边界转换为普通数字。
  */
 
 /**
@@ -28,7 +27,7 @@ export function toCents(value) {
 }
 
 /**
- * 将整数分转换为具有 2 位小数精度的 JavaScript 数字。
+ * 将整数分转换为具有 2 位小数精度的普通数字。
  *
  * @param {number | null | undefined} cents - 整数分。
  * @returns {number} 金额值（例如 1234.56）。Null/undefined 会变为 0。
@@ -51,13 +50,14 @@ export function formatCents(cents) {
 }
 
 /**
- * 汇总一组分值。
+ * 汇总一组分值。可传入多个分值参数，或单个分值数组。
  *
- * @param {...number} values - 分值。
+ * @param {...(number | number[] | null | undefined)} values - 分值，或单个分值数组。
  * @returns {number} 总分值。
  */
 export function sumCents(...values) {
-  return values.reduce((total, value) => total + (value ?? 0), 0);
+  const list = values.length === 1 && Array.isArray(values[0]) ? values[0] : values;
+  return list.reduce((total, value) => total + (value ?? 0), 0);
 }
 
 /**

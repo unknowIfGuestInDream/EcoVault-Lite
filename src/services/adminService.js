@@ -5,19 +5,18 @@ import { hashPassword } from '../security/passwordHash.js';
 /**
  * @file 管理员用户管理服务。
  *
- * 复现 Java `AdminServiceImpl`：列出用户、启用/禁用
+ * 管理员用户管理服务能力：列出用户、启用/禁用
  * （包含防止禁用当前账号的保护）、更新和删除
  * 用户。每当账号被禁用、密码被修改，或
  * 被删除时，其所有活跃会话都会被吊销。
  *
- * Java 实现从线程局部变量解析“当前用户”；此处
- * 调用方显式传入 `currentUserId`。
+ * 调用方显式传入 `currentUserId`，用于防止管理员误操作当前账号。
  */
 
 /**
  * 解析并校验角色字符串（无默认值；必须有效）。
  *
- * @param {string} role - 原始角色。
+ * @param {string} role - 输入角色。
  * @returns {string} 有效角色。
  * @throws {BusinessError} 当角色无效时。
  */

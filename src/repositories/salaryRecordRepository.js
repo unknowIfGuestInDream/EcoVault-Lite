@@ -40,9 +40,9 @@ const DERIVED_COLUMNS = Object.freeze({
 });
 
 /**
- * 将原始行映射为工资实体（金额字段以分为单位）。
+ * 将数据库行映射为工资实体（金额字段以分为单位）。
  *
- * @param {object | undefined} row - 原始行。
+ * @param {object | undefined} row - 数据库行。
  * @returns {object | null} 实体或 null。
  */
 function mapSalary(row) {

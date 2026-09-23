@@ -4,10 +4,9 @@ import { AccessDeniedError } from '../common/errors.js';
 /**
  * @file CSRF 防护（双重提交 cookie）。
  *
- * 对齐 Java `CookieCsrfTokenRepository.withHttpOnlyFalse()` 策略：
  * 向浏览器签发非 HttpOnly 的 `XSRF-TOKEN` cookie，且不安全
  * 请求必须在 `X-XSRF-TOKEN` header 中回传该值。登录端点
- * 被豁免（匹配 Spring `csrf.ignoringRequestMatchers` 配置）。
+ * 被豁免强制校验。
  */
 
 /** 携带 CSRF token 的 Cookie（可被 JS 读取，因此不是 HttpOnly）。 */
@@ -22,7 +21,7 @@ const UNSAFE_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 /**
  * 提取请求 URL 的路径部分（不含查询字符串）。
  *
- * @param {string} url - 原始请求 URL。
+ * @param {string} url - 请求 URL。
  * @returns {string} 路径部分。
  */
 function pathOf(url) {

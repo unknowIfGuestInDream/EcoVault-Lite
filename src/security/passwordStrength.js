@@ -1,7 +1,7 @@
 /**
  * @file 密码强度评估。
  *
- * 精确对齐 Java `PasswordStrengthUtil.evaluate` 评分方式：
+ * 密码强度评分方式：
  * - length >= 12 -> +40，否则 >= 8 -> +25，否则 >= 6 -> +10
  * - 包含小写字母 -> +15
  * - 包含大写字母 -> +15
@@ -60,15 +60,12 @@ export function evaluate(password) {
   if (/[0-9]/.test(password)) {
     score += 15;
   }
-  // "special" 对齐 Java 的 !Character.isLetterOrDigit：任何
-  // 非 ASCII 字母或数字的字符。使用面向 ASCII 的字符类近似。
+  // 特殊字符表示任何非 ASCII 字母或数字的字符。
   if (/[^A-Za-z0-9]/.test(password)) {
     score += 15;
   }
 
-  if (score > 100) {
-    score = 100;
-  }
+  score = Math.min(score, 100);
 
   let level = StrengthLevel.WEAK;
   if (score >= 70) {

@@ -4,15 +4,14 @@ import { AuthError, AccessDeniedError } from '../common/errors.js';
 /**
  * @file 认证与授权钩子。
  *
- * 复现 Java `JwtAuthenticationFilter` +
- * `SecurityConfig` 组合的行为：
+ * 认证与授权流程：
  * - token 从 `Authorization: Bearer` header 或
  *   `ECOVAULT_TOKEN` cookie 中解析，并根据活跃会话存储进行校验。
  * - 授权按 URL 模式集中强制执行（public / admin / other），
  *   而不是逐路由执行。
  */
 
-/** 携带认证 token 的 Cookie 名称（对齐 Java）。 */
+/** 携带认证 token 的 Cookie 名称。 */
 export const TOKEN_COOKIE = 'ECOVAULT_TOKEN';
 
 /** 始终公开的精确路径。 */
@@ -34,7 +33,7 @@ const ADMIN_BASES = ['/actuator', '/admin', '/api/admin', '/api/logs'];
 /**
  * 提取请求 URL 的路径部分（不含查询字符串）。
  *
- * @param {string} url - 原始请求 URL。
+ * @param {string} url - 请求 URL。
  * @returns {string} 路径部分。
  */
 function pathOf(url) {
@@ -80,7 +79,7 @@ function isApiPath(path) {
  * 从请求中解析 bearer token（先 header，后 cookie）。
  *
  * @param {object} request - 传入请求。
- * @returns {string | null} 原始 JWT；不存在时返回 null。
+ * @returns {string | null} JWT；不存在时返回 null。
  */
 export function resolveToken(request) {
   const header = request.headers?.authorization;
@@ -102,7 +101,7 @@ export function resolveToken(request) {
  * @returns {void}
  */
 export function registerSecurity(app, context) {
-  const { userRepository, userSessionRepository } = context.repositories;
+  const { userRepository, sessionRepository } = context.repositories;
 
   // 1. 认证：解析当前用户，且绝不拒绝。
   app.addHook('onRequest', async (request) => {
@@ -118,7 +117,7 @@ export function registerSecurity(app, context) {
     } catch {
       return;
     }
-    const session = userSessionRepository.findByJti(claims.jti);
+    const session = sessionRepository.findByJti(claims.jti);
     if (!session || !session.active) {
       return;
     }

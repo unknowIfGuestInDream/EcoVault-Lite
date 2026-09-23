@@ -5,8 +5,8 @@ import { fromCents, formatCents } from '../utils/money.js';
 /**
  * @file 账本（收入/支出）服务。
  *
- * 复现 Java `LedgerServiceImpl`：CRUD、筛选查询、聚合
- * 统计（总额、保留首次出现顺序的按标签明细、月度
+ * 账本服务能力：CRUD、筛选查询、聚合统计（总额、
+ * 保留首次出现顺序的按标签明细、月度
  * 趋势升序排序）以及带 BOM 前缀的 CSV 导出。
  */
 
@@ -16,7 +16,7 @@ const UNCATEGORISED = '未分类';
 /**
  * 解析可选的账本类型字符串。
  *
- * @param {string | null | undefined} type - 原始类型。
+ * @param {string | null | undefined} type - 输入类型。
  * @returns {string | null} 有效的 {@link LedgerType}，为空时返回 null。
  * @throws {BusinessError} 当值非空但无效时。
  */
@@ -34,7 +34,7 @@ function parseType(type) {
 /**
  * 解析必填的账本类型字符串。
  *
- * @param {string | null | undefined} type - 原始类型。
+ * @param {string | null | undefined} type - 输入类型。
  * @returns {string} 有效的 {@link LedgerType}。
  * @throws {BusinessError} 当值为空或无效时。
  */
@@ -49,7 +49,7 @@ function parseRequiredType(type) {
 /**
  * 规范化标签列表：去除首尾空白、丢弃空值、保序去重。
  *
- * @param {string[] | null | undefined} tags - 原始标签。
+ * @param {string[] | null | undefined} tags - 输入标签。
  * @returns {string[]} 规范化后的标签。
  */
 function normalizeTags(tags) {
@@ -72,7 +72,7 @@ function normalizeTags(tags) {
 /**
  * 转义用于 CSV 输出的值。
  *
- * @param {string | null | undefined} value - 原始值。
+ * @param {string | null | undefined} value - 输入值。
  * @returns {string} 转义后的值。
  */
 function escapeCsv(value) {

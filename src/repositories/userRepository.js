@@ -5,9 +5,9 @@ import { nowDateTime } from '../utils/datetime.js';
  */
 
 /**
- * 将原始数据库行映射为用户实体。
+ * 将数据库行映射为用户实体。
  *
- * @param {object | undefined} row - 原始行。
+ * @param {object | undefined} row - 数据库行。
  * @returns {object | null} 用户实体（`enabled` 为布尔值）或 null。
  */
 function mapUser(row) {

@@ -1,11 +1,10 @@
 # EcoVault Lite（生态保险箱·轻量版）
 
-EcoVault Lite 是个人数据安全存储与智能管理平台，由原 Java / Spring Boot 项目
-[EcoVault](https://github.com/unknowIfGuestInDream/EcoVault) 迁移而来，基于
-**Node.js 24 + SQLite3** 打造，目标是在完整保留原有功能的前提下显著降低常驻内存占用、
-简化部署运维，并减轻对同机 Jenkins 构建任务的资源影响。
+EcoVault Lite 是个人数据安全存储与智能管理平台，基于 **Node.js 24 + SQLite3**
+打造，面向单机部署场景提供低资源占用、易运维的安全数据管理能力。
+项目采用分层架构与本地数据库，兼顾敏感数据保护、权限控制、操作审计与日常使用体验。
 
-> 迁移背景、框架选型、功能对照与 Doxygen→JSDoc 决策等详见 [`docs/MIGRATION.md`](docs/MIGRATION.md)。
+> 架构设计、分层职责与核心安全策略详见 [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)。
 
 ## 技术栈
 
@@ -32,7 +31,7 @@ EcoVault Lite 是个人数据安全存储与智能管理平台，由原 Java / S
 
 ## 目录结构
 
-```
+```text
 src/
   config/         # 配置与环境变量加载
   domain/         # 领域模型、枚举与派生计算

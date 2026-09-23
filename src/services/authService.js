@@ -5,7 +5,7 @@ import { hashPassword, verifyPassword } from '../security/passwordHash.js';
 /**
  * @file 认证与账号服务。
  *
- * 复现 Java `AuthServiceImpl`：注册、支持单设备/受限
+ * 认证与账号服务能力：注册、支持单设备/受限
  * 设备约束的登录、登出、资料更新、密码修改（会吊销所有
  * 会话）以及隐私模式密码校验。
  */
@@ -13,7 +13,7 @@ import { hashPassword, verifyPassword } from '../security/passwordHash.js';
 /**
  * 解析并校验角色字符串。
  *
- * @param {string | null | undefined} role - 原始角色。
+ * @param {string | null | undefined} role - 输入角色。
  * @returns {string} 有效角色（默认为 USER）。
  * @throws {BusinessError} 当角色非空但无效时。
  */

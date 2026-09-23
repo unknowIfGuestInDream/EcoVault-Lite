@@ -5,9 +5,9 @@ import { nowDateTime } from '../utils/datetime.js';
  */
 
 /**
- * 将原始行映射为会话实体。
+ * 将数据库行映射为会话实体。
  *
- * @param {object | undefined} row - 原始行。
+ * @param {object | undefined} row - 数据库行。
  * @returns {object | null} 会话实体（`active` 为布尔值）或 null。
  */
 function mapSession(row) {

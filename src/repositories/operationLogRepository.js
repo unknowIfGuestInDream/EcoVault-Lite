@@ -5,9 +5,9 @@ import { nowDateTime } from '../utils/datetime.js';
  */
 
 /**
- * 将原始行映射为操作日志实体。
+ * 将数据库行映射为操作日志实体。
  *
- * @param {object | undefined} row - 原始行。
+ * @param {object | undefined} row - 数据库行。
  * @returns {object | null} 实体或 null。
  */
 function mapLog(row) {

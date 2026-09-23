@@ -5,7 +5,7 @@ import { fromCents, formatCents, sumCents, averageCents } from '../utils/money.j
 /**
  * @file 工资服务。
  *
- * 复现 Java `SalaryServiceImpl`：按 (year,month) upsert、统计
+ * 工资服务能力：按 (year,month) upsert、统计
  * 将年终奖与月度记录分离、26 列 CSV 导出
  * （包含存储/派生列）以及可感知引号的 CSV 导入器。
  */
@@ -25,7 +25,7 @@ const EARNING_KEYS = [
 /**
  * 将金额单元格（元字符串）解析为整数分。
  *
- * @param {string | null | undefined} cell - 原始单元格。
+ * @param {string | null | undefined} cell - 输入单元格。
  * @returns {number} 整数分（为空时为 0）。
  * @throws {BusinessError} 当值不是有效数字时。
  */
@@ -43,7 +43,7 @@ function parseMoneyCell(cell) {
 /**
  * 解析整数单元格。
  *
- * @param {string} cell - 原始单元格。
+ * @param {string} cell - 输入单元格。
  * @param {number} lineNum - 从 1 开始的行号（用于错误消息）。
  * @param {string} colName - 列名（用于错误消息）。
  * @returns {number} 解析后的整数。
@@ -60,7 +60,7 @@ function parseIntCell(cell, lineNum, colName) {
 /**
  * 转义用于 CSV 输出的值。
  *
- * @param {string | null | undefined} value - 原始值。
+ * @param {string | null | undefined} value - 输入值。
  * @returns {string} 转义后的值。
  */
 function escapeCsv(value) {
@@ -77,7 +77,7 @@ function escapeCsv(value) {
 /**
  * 反转义带引号的 CSV 单元格。
  *
- * @param {string | null | undefined} cell - 原始单元格。
+ * @param {string | null | undefined} cell - 输入单元格。
  * @returns {string} 反转义后的值。
  */
 function unescapeCsv(cell) {

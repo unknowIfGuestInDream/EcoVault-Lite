@@ -11,6 +11,8 @@ data/
 # Test / coverage output
 coverage/
 .nyc_output/
+.c8-*/
+junit.xml
 
 # Generated API documentation (JSDoc)
 docs-gen/

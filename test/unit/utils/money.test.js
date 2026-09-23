@@ -1,6 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { toCents, fromCents, formatCents, sumCents, averageCents } from '../../../src/utils/money.js';
+import {
+  toCents,
+  fromCents,
+  formatCents,
+  sumCents,
+  averageCents,
+} from '../../../src/utils/money.js';
 
 /**
  * @file 金额算术辅助工具测试。
