@@ -1,4 +1,4 @@
-# EcoVault Lite（生态保险箱·轻量版）
+# EcoVault Lite（生态保险箱）
 
 EcoVault Lite 是个人数据安全存储与智能管理平台，基于 **Node.js 24 + SQLite3**
 打造，面向单机部署场景提供低资源占用、易运维的安全数据管理能力。
